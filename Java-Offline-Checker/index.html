@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; img-src data:; base-uri 'none'; form-action 'none'">
+<title>EIE3320 · 离线 Java 检查器 2.1</title>
+<style>
+:root{color-scheme:light;--ink:#16263b;--muted:#53667c;--line:#ced9e3;--blue:#1458cc;--paper:#f3f6fa;--code:#112034}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.65 system-ui,"Microsoft YaHei",sans-serif}header,main,footer{max-width:1360px;margin:auto;padding:24px 32px}header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;border-bottom:1px solid var(--line)}h1{margin:4px 0;font-size:30px;letter-spacing:-1px}h2{font-size:19px;margin:0 0 12px}p{margin:8px 0}.eyebrow{font:700 12px/1.5 monospace;color:var(--blue);letter-spacing:2px}.muted,small{color:var(--muted)}.badge{white-space:nowrap;background:#dfefe9;color:#145743;padding:8px 14px;border-radius:100px;font-size:13px}.intro{margin:0 0 20px;max-width:900px}.workspace{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(320px,1fr);gap:22px}.card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 5px 22px #14294106}.panel{padding:20px}.bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}button,.upload{border:1px solid #b9c8d8;background:white;color:var(--ink);border-radius:7px;padding:9px 13px;font:600 14px/1.3 inherit;cursor:pointer;display:inline-flex;align-items:center;gap:7px}button:hover,.upload:hover{background:#eaf1ff}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.upload:focus-within{outline:3px solid #72a8ff;outline-offset:2px}button:disabled{opacity:.45;cursor:not-allowed}.primary{background:var(--blue);color:#fff;border-color:var(--blue)}.primary:hover{background:#0e46a3}.secondary{background:#e9f0fc;color:#164c9b;border-color:#d2dff2}input,select{font:inherit;padding:7px 9px;border:1px solid #b9c8d8;border-radius:6px;max-width:100%;background:white;color:var(--ink)}#filename{width:165px}#tabs{display:flex;gap:5px;flex-wrap:wrap;margin:14px 0 10px}.tab{border-radius:6px;padding:6px 10px;font-size:12px}.selected{background:#dce8ff;border-color:#5b85c3}.editor{display:flex;background:var(--code);border-radius:9px;overflow:hidden;height:460px}#numbers{margin:0;padding:15px 10px 40px;color:#8094b0;background:#0b192a;text-align:right;min-width:46px;font:14px/24px Consolas,monospace;user-select:none;overflow:hidden}#source{padding:15px 12px;margin:0;background:transparent;color:#e4edf9;border:0;outline:none;resize:vertical;min-width:0;width:100%;height:100%;tab-size:4;white-space:pre;overflow:auto;font:14px/24px Consolas,"Courier New",monospace}#source:focus-visible{outline:2px solid #72a8ff;outline-offset:-2px}.actions{margin-top:14px}.result-header{border-bottom:1px solid var(--line);padding:18px 20px;background:#fbfcff}#resultLabel{font-weight:700}#issues{list-style:none;padding:16px;margin:0;max-height:550px;overflow:auto}#issues:empty:after{content:"检查结果会显示在这里。点击行号可跳转到代码。";display:block;padding:12px;color:var(--muted)}.issue{padding:14px;margin-bottom:10px;background:#f7f9fc;border-left:3px solid #7790af;border-radius:5px;overflow-wrap:anywhere}.issue.error{border-color:#bc3344;background:#fff5f6}.issue.warning{border-color:#c58c21;background:#fffaf0}.issue p{white-space:pre-wrap;font-size:14px}.jump{padding:0;border:0;background:transparent;color:var(--blue);font-size:12px;text-align:left}.jump:hover{text-decoration:underline;background:transparent}#status{margin:18px 0 0;border:1px solid #cbdaf0;background:#eaf1fd;padding:12px 16px;border-radius:8px;font-size:14px;overflow-wrap:anywhere}#preview{margin-top:24px}#patches label{display:flex;align-items:flex-start;gap:9px;margin:10px 0;font-size:14px}#patches input{margin-top:6px}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}.comparison pre{background:var(--code);color:#e4edf9;border-radius:8px;padding:14px;overflow:auto;max-height:400px;font:13px/1.7 Consolas,monospace}details{margin-top:20px;border:1px solid var(--line);background:white;border-radius:10px;padding:15px 20px}summary{font-weight:700;cursor:pointer}code{font-family:Consolas,monospace;background:#e8eef5;padding:2px 5px;border-radius:4px}.tip{padding:13px 15px;background:#fff8e9;border-radius:8px;font-size:13px;margin-top:15px}.upload input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);margin-top:24px;padding-top:18px}ol{padding-left:22px}a{color:var(--blue)}[hidden]{display:none!important}@media(max-width:900px){.workspace{grid-template-columns:1fr}.comparison{grid-template-columns:1fr}header,main,footer{padding:20px}header{flex-direction:column;gap:12px}h1{font-size:26px}.editor{height:400px}}
+#issues.compiledClean:empty:after{content:"本次编译没有错误或警告。请继续在 IDE 中运行并核对输出。"}
+.completions{border:1px solid #abc4e5;background:#f3f7ff;border-radius:8px;padding:6px;margin-top:6px;max-height:210px;overflow:auto}.completions button{display:block;width:100%;text-align:left;border:0;background:transparent;font-size:13px;padding:6px 10px}.completions button[aria-selected=true]{background:#d9e7ff}.candidateStatus{padding:12px 14px;border:1px solid #b7cde7;background:#edf4ff;border-radius:8px;margin:14px 0;font-weight:600}#candidateIssues{list-style:none;padding:0}#patches ol{font-size:14px;padding-left:24px}#patches li{margin:8px 0}
+</style>
+</head>
+<body>
+<header><div><div class="eyebrow">EIE3320 / LOCAL TOOL / V2.1</div><h1>离线 Java 检查器</h1><p class="muted">先检查原代码，保留合法行为，再查看逐项修改建议。</p></div><div><div id="connection" class="badge" role="status">正在识别运行模式</div><button id="reconnect" style="margin-top:10px">重新连接 JDK</button></div></header>
+<main>
+<p class="intro">连接 JDK 后先编译原代码；已能编译时保留原代码。默认生成语法草稿，增加打印、改变字符串拼接或猜变量名等建议由你逐项选择。所有资源在本机，无需互联网。</p>
+<div class="workspace">
+<section class="card panel" aria-label="代码编辑器">
+<div class="bar"><label>文件名 <input id="filename" spellcheck="false" value="Main.java" aria-label="文件名"></label><label>代码类型 <select id="mode"><option value="file">完整 Java 文件</option><option value="snippet">方法 / 语句片段</option></select></label><span id="fileCount" class="muted"></span></div>
+<div class="bar actions"><label>生成前编译范围 <select id="repairScope"><option value="current">当前文件</option><option value="all">全部文件（同题依赖）</option></select></label><button id="renameFile">按 public 类名改文件名</button></div>
+<div id="tabs" aria-label="文件列表"></div>
+<div class="editor"><pre id="numbers" aria-hidden="true">1</pre><textarea id="source" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Java 源代码"></textarea></div>
+<div id="completions" class="completions" role="listbox" aria-label="离线名称补全" hidden></div>
+<div class="bar actions"><button id="analyse" class="primary">检查常见错误</button><button id="generate" class="secondary">生成语法草稿</button><button id="showFixes">逐项建议</button><button id="compile" disabled>编译当前文件</button><button id="compileAll" disabled>编译全部（1 个）</button><button id="undo" disabled>撤销</button></div>
+<p id="compileScope" class="muted" aria-live="polite"></p>
+<div class="bar actions"><label class="upload">导入 .java<input id="upload" type="file" accept=".java" multiple></label><button id="download">下载当前文件</button><button id="complete">补全（Ctrl+Space）</button><button id="add">＋ 文件</button><button id="remove">移除当前</button><button id="example">载入错误示例</button></div>
+<div class="bar actions"><button id="restoreDraft" disabled>恢复本机草稿</button><button id="clearDraft">清除浏览器草稿</button><small id="draftState"></small></div>
+<p class="muted"><small>输入两个字母可显示常用名称补全 · ↑↓ 选择，Enter / Tab 接受，Esc 关闭 · sout / psvm 提供打印 / main 模板 · 回车自动缩进，选中多行按 Tab / Shift+Tab 缩进 · Ctrl + Enter 检查。刷新前请下载代码。</small></p>
+</section>
+<section class="card" aria-label="检查结果"><div class="result-header"><div class="eyebrow">DIAGNOSTICS</div><p id="resultLabel">等待检查</p></div><ul id="issues"></ul><div class="panel"><div class="tip" id="jdkHelp" hidden><strong>需要准确的编译结果？</strong><br>运行同文件夹的 <code>CHECK_WITH_JDK.cmd</code>，它会尝试打开正确的本机页面；保持启动窗口运行。如果未自动打开，请复制窗口里的 <code>http://127.0.0.1:实际端口</code> 到浏览器地址栏。需要完整 JDK 17+。语法草稿生成本身不需要 JDK。</div><p id="runtimeFolder" class="muted"></p><small>规则不是完整 Java 解析器。编译通过仅说明语法和类型通过，仍须在 IDE 运行、核对输出和题目约束。涉及输出、名称或签名的建议默认不选。</small></div></section>
+</div>
+<p id="status" role="status" aria-live="polite"></p>
+<section id="preview" class="card panel" hidden><h2>查看修改草稿与原因</h2><p class="muted">语法修正可生成草稿；可能改变输出、变量或方法签名的建议默认不选。逐项核对给定 main、方法头、输出和题意，再应用或下载。</p><div id="patches"></div><div class="comparison"><div><strong>修改前</strong><pre id="before"></pre></div><div><strong>修改后</strong><pre id="after"></pre></div></div><div id="candidateControls" hidden><p id="candidateStatus" class="candidateStatus" role="status"></p><div class="bar"><label>验证范围 <select id="candidateScope"><option value="current">当前修正版</option><option value="all">全部文件（含修正）</option></select></label><button id="verifyCandidate" disabled>验证修正版</button><button id="downloadCandidate">下载修正版草稿</button></div><ul id="candidateIssues"></ul></div><button id="apply" class="primary">应用所选修改</button></section>
+<details><summary>如何确保离线可用？</summary><ol><li>双击 <code>index.html</code> 即可做浏览器规则检查和生成语法草稿；不需要 Java 或互联网。</li><li>真实编译需运行 <code>CHECK_WITH_JDK.cmd</code>，保持窗口打开并使用它显示的本机地址。断开 Wi-Fi 或网线仍能使用。</li><li>一道题的依赖类一起导入，生成前范围选“全部文件”；独立程序选“当前文件”。若需要第三方 JAR 或项目目录结构，请使用 IDE。</li><li>草稿尽可能保存至本机浏览器，可显式恢复和清除；隐私模式、浏览器限制或更换端口时可能无法恢复，请及时下载每个 .java。</li></ol><p>只访问本机，不运行 main，不加载注解处理器。编译语言级别为 Java 17。</p></details>
+<details><summary>能检查和修正什么？</summary><p>重点覆盖你练习中出现过的问题：<code>printIn</code> / <code>println</code>、<code>nuul</code> / <code>null</code>、缺少 if 条件括号、部分缺失分号、数组与 String 的 length 区别、集合的 size、循环变量和括号配对等。确定替换位置后才能提供修正预览；不确定的问题只解释，不擅自改。</p><p>JDK 编译会进一步发现找不到名称、返回类型错误、缺少 return、构造器或继承签名不匹配等，并附中文排查方向。循环范围、提前 return、对象共享、输出格式等仍需按题目测试。</p></details>
+</main>
+<footer>独立离线文件 · 仅本机处理 · 无 CDN、遥测、外部字体或远程接口 · 检查器不代替题目要求及 IDE 测试</footer>
+<script>/* Offline, conservative Java hints. This is not a Java parser or compiler. */
+(function (root) {
+  'use strict';
+  function maskJava(source) {
+    const out = source.split('');
+    let state = 'code';
+    for (let i = 0; i < source.length; i++) {
+      const c = source[i], next = source[i + 1];
+      if (state === 'line') {
+        if (c === '\n') state = 'code'; else out[i] = ' ';
+      } else if (state === 'block') {
+        if (c === '*' && next === '/') { out[i] = out[i + 1] = ' '; i++; state = 'code'; }
+        else if (c !== '\n' && c !== '\r') out[i] = ' ';
+      } else if (state === 'text') {
+        if (source.slice(i, i + 3) === '"""') { i += 2; state = 'code'; }
+        else if (c !== '\n' && c !== '\r') out[i] = ' ';
+      } else if (state === 'string' || state === 'char') {
+        const quote = state === 'string' ? '"' : "'";
+        if (c === '\\') {
+          out[i] = ' ';
+          if (i + 1 < source.length) { if (next !== '\n') out[i + 1] = ' '; i++; }
+        } else if (c === quote) state = 'code';
+        else if (c !== '\n' && c !== '\r') out[i] = ' ';
+      } else if (c === '/' && next === '/') {
+        out[i] = out[i + 1] = ' '; i++; state = 'line';
+      } else if (c === '/' && next === '*') {
+        out[i] = out[i + 1] = ' '; i++; state = 'block';
+      } else if (source.slice(i, i + 3) === '"""') { i += 2; state = 'text'; }
+      else if (c === '"') state = 'string';
+      else if (c === "'") state = 'char';
+    }
+    return { text: out.join(''), state };
+  }
+  function analyse(source, filename, mode) {
+    filename = filename || 'Main.java';
+    mode = mode || 'file';
+    const lex = maskJava(source), code = lex.text, issues = [];
+    const starts = [0];
+    for (let i = 0; i < source.length; i++) if (source[i] === '\n') starts.push(i + 1);
+    function position(index) {
+      let lo = 0, hi = starts.length;
+      while (lo + 1 < hi) { const mid = (lo + hi) >> 1; if (starts[mid] <= index) lo = mid; else hi = mid; }
+      return { line: lo + 1, column: index - starts[lo] + 1 };
+    }
+    function add(id, at, message, severity, patch) {
+      issues.push({ id, filename, ...position(at), message, severity: severity || 'warning', patch: patch || null });
+    }
+    function find(re, fn) { for (const match of code.matchAll(re)) fn(match); }
+    find(/\bSystem\s*\.\s*out\s*\.\s*(printIn|print1n|pritnln)\b/g, m => {
+      const start = m.index + m[0].lastIndexOf(m[1]);
+      add('println-typo', start, '输出方法拼写应为 println：末尾是小写 l，不是大写 I 或数字 1。', 'error',
+          { start, end: start + m[1].length, replacement: 'println' });
+    });
+    find(/\breturn\s+(nuul|nill|nul)\s*;/g, m => {
+      const word = m[1];
+      if (new RegExp('\\b(?:[A-Z][\\w$]*(?:<[^>]+>)?|int|double|boolean|long|float|char)(?:\\s*\\[\\s*\\])?\\s+' + word + '\\b').test(code)) return;
+      const start = m.index + m[0].indexOf(word);
+      add('null-typo', start, '这里很可能是 null 的拼写错误。请确认你要返回空引用。', 'warning',
+          { start, end: start + word.length, replacement: 'null' });
+    });
+    find(/\bfor\s*\(\s*([A-Za-z_$][\w$]*)\s*=/g, m => {
+      const name = m[1];
+      const declared = new RegExp('\\b(?:int|long|double|float|short|byte)\\s+' + name + '\\b').test(code);
+      if (!declared) add('loop-variable', m.index,
+          '检查循环变量 ' + name + ' 是否已声明。常见写法为 for (int ' + name + ' = 0; ...)。此提示不替代作用域分析。');
+    });
+    find(/=\s*\[\s*\]/g, m => add('empty-array-syntax', m.index,
+        'Java 不能用 = [] 创建数组。固定数组可用 new int[长度]；需要 add 的动态集合可用 ArrayList<Integer>。', 'error'));
+    // Needs an operand on both sides, so !in.hasNext() on a Scanner named in is not reported.
+    find(/(?<=[\w$\])]\s*)!\s*in\s+(?=[\w$(])/g, m => add('not-in', m.index,
+        'Java 没有 !in 运算符。集合可检查 !list.contains(value)；数组需要遍历比较。', 'error'));
+    find(/\b[A-Za-z_$][\w$]*\s+equals\s+[A-Za-z_$]/g, m => add('equals-call', m.index,
+        'equals 是方法，调用格式为 left.equals(right)，需要点号和参数括号。', 'error'));
+    const lineMasks = code.split('\n'), originals = source.split('\n');
+    // Brace context at each line start: statements are not expected directly inside an array initializer.
+    const initializerAt = [], braces = [];
+    for (let i = 0, line = 0; i <= code.length; i++) {
+      if (i === starts[line]) initializerAt[line++] = braces.length > 0 && braces[braces.length - 1];
+      if (code[i] === '{') braces.push(/[=,{(\]]\s*$/.test(code.slice(Math.max(0, i - 80), i)));
+      else if (code[i] === '}') braces.pop();
+    }
+    const modifiers = '(?:(?:public|protected|private|static|final|transient|volatile)\\s+)*';
+    const type = '(?:var|int|long|double|float|short|byte|char|boolean|[A-Z][\\w$]*(?:\\s*<[^;=]*>)?)(?:\\s*\\[\\s*\\])*';
+    const target = '[\\w$]+(?:\\s*\\.\\s*[\\w$]+|\\s*\\[[^\\]]*\\])*';
+    const statement = new RegExp('^(?:' + [
+      '(?:import\\s+(?:static\\s+)?|package\\s+)[\\w$.]+(?:\\.\\*)?',
+      modifiers + type + '\\s+[\\w$]+(?:\\s*,\\s*[\\w$]+)*(?:\\s*=.+)?',
+      target + '\\s*(?:[+\\-*/%&|^]|<<|>>>?)?=(?!=).+',
+      '(?!(?:if|for|while|switch|catch|synchronized|return|throw|new|else|do|try|case|assert)\\b)' + target + '\\s*\\(.*\\)',
+      '(?:return|throw)\\s+.+',
+      '(?:break|continue)(?:\\s+[\\w$]+)?',
+      '}\\s*while\\s*\\(.*\\)',
+      target + '\\s*(?:\\+\\+|--)',
+      '(?:\\+\\+|--)\\s*' + target
+    ].join('|') + ')$');
+    for (let i = 0; i < lineMasks.length; i++) {
+      const line = lineMasks[i], trimmed = line.trim();
+      const missingParens = /^(\s*(?:}\s*)?(?:else\s+)?)(if|while)\s+([^(].*?)\{\s*$/.exec(line);
+      if (missingParens) {
+        const keyword = missingParens[2];
+        const begin = starts[i] + missingParens[1].length;
+        const brace = line.lastIndexOf('{');
+        const condition = originals[i].slice(missingParens[1].length + keyword.length, brace).trim();
+        if (condition && !condition.startsWith('(')) add(keyword + '-parentheses', begin,
+            keyword + ' 条件必须放在圆括号内：' + keyword + ' (条件) { ... }。方法调用的括号不能代替 ' + keyword + ' 的括号。', 'error',
+            { start: begin, end: starts[i] + brace + 1, replacement: keyword + ' (' + condition + ') {' });
+      }
+      if (/^\s*(?:public|protected|private)\s+(?:static\s+)?(?:[\w$<>\[\]]+\s+)?[\w$]+\s*\([^;{}]*\)\s*(?:throws\s+[\w$.,\s]+)?$/.test(line)) {
+        const next = lineMasks.slice(i + 1).find(x => x.trim());
+        if (next && !next.trim().startsWith('{') && !trimmed.endsWith(';')) add('method-body', starts[i],
+            '方法头后似乎缺少方法体的 {。方法体要用一对大括号包住，普通方法不能定义在另一个方法内部。', 'warning');
+      }
+      const next = lineMasks.slice(i + 1).find(x => x.trim()) || '';
+      const count = (re) => (line.match(re) || []).length;
+      // A trailing ++, -- or import .* ends a statement; any other trailing operator means the expression continues.
+      const continues = /[=+\-*/%.,?:&|^!<>(\[]$/.test(trimmed.replace(/(?:\+\+|--|\.\*)$/, ''));
+      if (statement.test(trimmed) && !initializerAt[i] && !/[;{}]$/.test(trimmed) && !continues &&
+          !trimmed.includes('"""') && count(/\(/g) === count(/\)/g) && count(/\[/g) === count(/\]/g) &&
+          !/^\s*[.+\-*/%?:,&|^=<>!)\]{;]/.test(next)) {
+        const local = line.search(/\s*$/);
+        if (local >= 0 && trimmed) add('semicolon', starts[i] + local,
+            '这一行看起来是完整语句，末尾可能缺少分号。若这是跨行表达式，请不要应用此建议。', 'warning',
+            { start: starts[i] + local, end: starts[i] + local, replacement: ';' });
+      }
+    }
+    const pairs = { ')': '(', ']': '[', '}': '{' }, stack = [];
+    for (let i = 0; i < code.length; i++) {
+      if ('([{'.includes(code[i])) stack.push({ char: code[i], at: i });
+      else if (pairs[code[i]]) {
+        if (stack.length && stack[stack.length - 1].char === pairs[code[i]]) stack.pop();
+        else add('unmatched-close', i, '这个 ' + code[i] + ' 没有匹配的左括号。请检查方法、循环和类的边界。', 'error');
+      }
+    }
+    for (const entry of stack) add('unclosed-delimiter', entry.at,
+        '这里的 ' + entry.char + ' 尚未闭合。请人工确定缺失位置；不能可靠地把所有括号都补到文件末尾。', 'error');
+    if (!['code', 'line'].includes(lex.state)) add('unclosed-literal', Math.max(0, source.length - 1),
+        '文件结束时字符串、字符、文本块或块注释尚未闭合。请检查引号及 */。', 'error');
+    const arrays = new Set(), strings = new Set(), lists = new Set();
+    find(/\b[\w$]+\s*\[\s*\]\s+([\w$]+)/g, m => arrays.add(m[1]));
+    find(/\bString\s+([\w$]+)/g, m => strings.add(m[1]));
+    find(/\b(?:ArrayList|List)\s*<[^>\n]+>\s+([\w$]+)/g, m => lists.add(m[1]));
+    // With no symbol table, do not infer types for a name declared in conflicting scopes.
+    const ambiguous = new Set([...arrays,...strings,...lists].filter(name =>
+      Number(arrays.has(name))+Number(strings.has(name))+Number(lists.has(name))>1));
+    const declaredTypes = new Map();
+    find(/\b([A-Za-z_$][\w$]*(?:\s*<[^;{}()=\n]+>)?(?:\s*\[\s*\])?)\s+([A-Za-z_$][\w$]*)\b/g, m => {
+      if (/^(?:return|new|class|interface|enum|record|public|private|protected|static|final|abstract|throw|throws|import|package)$/.test(m[1])) return;
+      const types=declaredTypes.get(m[2]) || new Set(); types.add(m[1].replace(/\s/g,'')); declaredTypes.set(m[2],types);
+    });
+    for (const [name,types] of declaredTypes) if(types.size>1) ambiguous.add(name);
+    for (const name of arrays) {
+      if (ambiguous.has(name)) continue;
+      const re = new RegExp('\\b' + name.replace(/\$/g, '\\$') + '\\s*\\.\\s*length\\s*\\(\\s*\\)', 'g');
+      find(re, m => add('array-length', m.index, '按检测到的数组声明，长度使用 ' + name + '.length，不带括号。请确认此处没有同名变量遮蔽。', 'warning',
+          { start: m.index, end: m.index + m[0].length, replacement: name + '.length' }));
+    }
+    for (const name of strings) {
+      if (ambiguous.has(name)) continue;
+      const re = new RegExp('\\b' + name.replace(/\$/g, '\\$') + '\\s*\\.\\s*length\\b(?!\\s*\\()', 'g');
+      find(re, m => add('string-length', m.index, '按检测到的 String 声明，应调用 ' + name + '.length()。请确认变量类型和作用域。', 'warning',
+          { start: m.index, end: m.index + m[0].length, replacement: name + '.length()' }));
+    }
+    for (const name of lists) {
+      if (ambiguous.has(name)) continue;
+      const re = new RegExp('\\b' + name.replace(/\$/g, '\\$') + '\\s*\\.\\s*length\\b(?:\\s*\\(\\s*\\))?', 'g');
+      find(re, m => add('list-size', m.index, '按检测到的集合声明，元素数量使用 ' + name + '.size()。', 'warning',
+          { start: m.index, end: m.index + m[0].length, replacement: name + '.size()' }));
+      const wrong = new RegExp('\\b' + name.replace(/\$/g, '\\$') + '\\s*\\.\\s*getTitle\\s*\\(', 'g');
+      find(wrong, m => add('collection-vs-item', m.index,
+          name + ' 是集合，不是单个对象。遍历中的 item.getTitle() 取标题；results.add(item) 保存对象引用。', 'warning'));
+    }
+    find(/\breturn\s+[^;{}]+;\s*}\s*else\s*(?:\{\s*)?return\s+(?:0|null)\s*;/g, m => add('early-return', m.index,
+        '这里两个分支都会提前 return。若任务是统计全部或查找后续项，请检查是否过早结束循环；这不一定是错误。', 'hint'));
+    const primary = /\bpublic\s+(?:abstract\s+|final\s+)?(?:class|interface|enum|record)\s+([A-Za-z_$][\w$]*)/.exec(code);
+    if (primary && filename !== primary[1] + '.java') add('filename', primary.index,
+        'public 顶层类型名是 ' + primary[1] + '，文件名通常应为 ' + primary[1] + '.java。请修改文件名或按题目检查类名。', 'warning');
+    if (mode === 'file' && !/\b(?:class|interface|enum|record)\s+[\w$]+/.test(code) && source.trim()) add('fragment', 0,
+        '这看起来是方法/语句片段。可做规则检查；真实编译需要完整的类、字段、import 和依赖源文件。', 'hint');
+    if (root.JavaOfflineFixes) issues.push(...root.JavaOfflineFixes.patterns(source,filename,mode));
+    return issues.sort((a, b) => a.line - b.line || a.column - b.column);
+  }
+  function applyPatches(source, patches) {
+    const sorted = patches.slice().sort((a, b) => a.start - b.start || a.end - b.end);
+    let end = -1;
+    for (const p of sorted) {
+      if (p.start < end || p.start < 0 || p.end < p.start || p.end > source.length) throw new Error('修正范围重叠或已失效，请重新分析。');
+      end = p.end;
+    }
+    let result = source;
+    for (const p of sorted.reverse()) result = result.slice(0, p.start) + p.replacement + result.slice(p.end);
+    return result;
+  }
+  function compilerHelp(d) {
+    const text = d.message || '', code = d.code || '';
+    if (/public.*should be declared in a file named/i.test(text)) return '文件名须与 public 顶层类名一致；同时上传其他依赖类。';
+    if (/expected[345]/.test(code) || /class, interface|class、interface|class.*interface.*enum.*record/.test(text)) return '此处很可能位于类的大括号外。Java 17 的变量、循环和打印语句不能直接写在文件顶层；请放进类内的 main 方法。先修好结构，再检查后续类型错误。';
+    if (/expected/.test(code) || /expected/.test(text)) return '检查此位置前一行的分号、if/for 圆括号，以及方法/类的大括号。';
+    if (/ret.type.req/.test(code)) return '检查构造器名是否与类名一致；普通方法需要返回类型。';
+    if (/missing.ret.stmt/.test(code)) return '非 void 方法必须在所有正常路径返回对应类型的值。统计/收集方法通常在循环后 return。';
+    if (/cant.resolve|doesnt.exist/.test(code)) return '检查名称拼写、变量声明、import，以及是否已添加题目提供的全部 .java 文件。';
+    if (/non-static|nonstatic/.test(text) || /non-static/.test(code)) return '实例字段/方法需要具体对象；按题意移除 static 或通过对象访问，勿随意把所有字段改成 static。';
+    if (/incompatible.types|prob.found.req/.test(code)) return '核对返回值/参数类型：String 数字需 parse，ArrayList<Item> 应 add(item)，不是 add(item.getTitle())。';
+    if (/cant.apply/.test(code)) return '检查方法/构造器的参数个数和类型；super(...) 必须匹配已有父类构造器。';
+    if (/does.not.override/.test(code)) return '核对 @Override 下方法的名称、参数和返回类型；接口实现方法通常需要 public。';
+    return '优先处理最前面的编译错误；后续错误可能由前面的语法错误引起。编译通过后仍需检查题目要求和测试输出。';
+  }
+  const api = { maskJava, analyse, applyPatches, compilerHelp };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  root.JavaOfflineRules = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+</script>
+<script>/* Small offline Java quick fixes and completions. No AI and no external services. */
+(function (root) {
+  'use strict';
+  const rules = () => root.JavaOfflineRules;
+  const esc = text => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  // Re-indents a block to the given prefix, removing the indentation its lines share.
+  function indentBlock(text, prefix, newline) {
+    const lines = text.split(/\r?\n/), widths = lines.filter(l => l.trim()).map(l => /^[ \t]*/.exec(l)[0].length);
+    const common = widths.length ? Math.min(...widths) : 0;
+    return lines.map(l => l.trim() ? prefix + l.slice(common).trimEnd() : '').join(newline);
+  }
+  const automaticIds=new Set(['println-typo','null-typo','semicolon','if-parentheses','while-parentheses','class-keyword','class-name','class-opening-brace','missing-class-shell','top-level-statements','array-length','string-length','list-size','array-split','constructor-parse','numeric-string-add','tostring-return']);
+  function isAutomatic(issue) { return Boolean(issue.patch) && automaticIds.has(issue.id); }
+  function closeBrace(code, open) {
+    let depth = 0;
+    for (let i = open; i < code.length; i++) {
+      if (code[i] === '{') depth++;
+      else if (code[i] === '}' && --depth === 0) return i;
+    }
+    return -1;
+  }
+  function patterns(source, filename, mode) {
+    const code = rules().maskJava(source).text, issues = [];
+    function add(id, start, message, patch, severity, extra) {
+      const prefix = source.slice(0, start), line = prefix.split('\n').length;
+      const column = start - prefix.lastIndexOf('\n');
+      issues.push({id, filename, line, column, message, severity: severity || 'warning', patch:patch || null,...extra});
+    }
+    function patch(id, start, end, replacement, message) { add(id,start,message,{start,end,replacement}); }
+    const numeric = new Map(), stringArrays = new Set(), declared = new Set(), types = [];
+    for (const m of code.matchAll(/\b(int|double|long|float|short|byte)\s+([\w$]+)/g)) { numeric.set(m[2],m[1]); declared.add(m[2]); }
+    for (const m of code.matchAll(/\bString\s*\[\s*\]\s+([\w$]+)/g)) { stringArrays.add(m[1]); declared.add(m[1]); }
+    // Also covers enhanced-for variables (Shape shape : shapes) and lambda parameters.
+    for (const m of code.matchAll(/\b(?:[A-Z][\w$]*(?:\s*<[^>\n]+>)?|boolean|char)(?:\s*\[\s*\])*\s+([\w$]+)\s*(?=[=;,):])/g)) declared.add(m[1]);
+    for (const m of code.matchAll(/(?:\b([\w$]+)|\(([^()]*)\))\s*->/g)) for (const p of (m[1] || m[2]).split(',')) { const n=/([\w$]+)\s*$/.exec(p); if (n) declared.add(n[1]); }
+    for (const m of code.matchAll(/\b(class|interface|enum|record)\s+([\w$]+)[^{;]*\{/g)) {
+      const open = m.index + m[0].lastIndexOf('{'), end = closeBrace(code,open);
+      if (end >= 0) types.push({name:m[2],start:m.index,open,end});
+    }
+    const typeNames = new Set(types.map(t=>t.name));
+    const depthAt = index => { let d=0; for(const c of code.slice(0,index)) {if(c==='{') d++; else if(c==='}') d--;} return d; };
+    const declaredKinds=new Map();
+    for(const m of code.matchAll(/\b([A-Z][\w$]*(?:\s*<[^>\n]+>)?|int|double|long|float|short|byte|char|boolean)(\s*\[\s*\])?\s+([\w$]+)/g)) {
+      const kinds=declaredKinds.get(m[3]) || new Set(); kinds.add(m[1].replace(/\s/g,'')+(m[2]?'[]':'')); declaredKinds.set(m[3],kinds);
+    }
+    const ambiguous=name=>(declaredKinds.get(name)?.size || 0)>1;
+    for (const m of code.matchAll(/\bString\s+toString\s*\(\s*\)\s*\{/g)) {
+      const open=m.index+m[0].lastIndexOf('{'), end=closeBrace(code,open);
+      if (end < 0) continue;
+      const body=code.slice(open+1,end);
+      if (/\breturn\b/.test(body)) continue;
+      const onlyPrint=/^\s*System\s*\.\s*out\s*\.\s*println\s*\(([\s\S]*)\)\s*;\s*$/.exec(source.slice(open+1,end));
+      if (onlyPrint) {
+        const start=open+1+source.slice(open+1,end).indexOf('System');
+        const statementEnd=open+1+source.slice(open+1,end).lastIndexOf(';')+1;
+        patch('tostring-return',start,statementEnd,'return '+onlyPrint[1]+';',
+          'toString() 的返回类型是 String。这里仅打印了内容，没有返回值；应把 System.out.println(表达式); 改成 return 表达式;，在调用处打印对象。');
+      } else add('tostring-return',m.index,'toString() 必须返回 String。此方法中未检测到 return，请补上 return 表达式;，不能只打印。',null,'error');
+    }
+    for (const m of code.matchAll(/\b([\w$]+)\s*\+\s*'[^'\r\n]*'/g)) {
+      if (!numeric.has(m[1])) continue;
+      if (/\+\s*$/.test(code.slice(0,m.index))) continue; // may already be inside a String concatenation
+      const raw=source.slice(m.index,m.index+m[0].length), character=/'([|,:;\/-])'/.exec(raw);
+      if (!character) continue;
+      const start=m.index+character.index;
+      patch('numeric-char-concat',start,start+3,JSON.stringify(character[1]),
+        '可选输出建议（这段语法本身合法）：'+m[1]+' + 单引号字符会做数值相加，例如 101 + \'|\' 是 225。只有题目要求文本分隔符时，才改用 "'+character[1]+'"；此改动会改变输出，默认不应用。');
+    }
+    for (const name of stringArrays) {
+      if(ambiguous(name)) continue;
+      const re=new RegExp('\\b'+esc(name)+'\\s*\\.\\s*split\\b','g');
+      for (const m of code.matchAll(re)) {
+        let index=null;
+        for (const loop of code.matchAll(/\bfor\s*\(\s*int\s+([\w$]+)\s*=[^;]*;([^;]*);[^)]*\)\s*\{/g)) {
+          const open=loop.index+loop[0].lastIndexOf('{'), end=closeBrace(code,open);
+          if (open < m.index && end > m.index && new RegExp('\\b'+esc(name)+'\\s*\\.\\s*length\\b').test(loop[2])) index=loop[1];
+        }
+        const message=name+' 是 String[] 数组，数组没有 split()。先取出其中一条字符串，再拆字段：'+name+'['+(index || '下标')+'].split(",")。';
+        if (index) patch('array-split',m.index,m.index+m[0].length,name+'['+index+'].split',message);
+        else add('array-split',m.index,message,null,'error');
+      }
+    }
+    const parsers={int:'Integer.parseInt',double:'Double.parseDouble',long:'Long.parseLong',float:'Float.parseFloat',short:'Short.parseShort',byte:'Byte.parseByte'};
+    const constructors=new Map();
+    for (const m of code.matchAll(/\b(?:public|protected|private)\s+([A-Z][\w$]*)\s*\(([^()]*)\)\s*\{/g)) {
+      if (!typeNames.has(m[1])) continue;
+      const params=m[2].trim()?m[2].split(',').map(p=>/^\s*([\w$]+)\s+[\w$]+\s*$/.exec(p)?.[1] || '?'):[];
+      const list=constructors.get(m[1]) || []; list.push(params); constructors.set(m[1],list);
+    }
+    for (const m of code.matchAll(/\bnew\s+([A-Z][\w$]*)\s*\(([^()\n]*)\)/g)) {
+      const args=m[2].split(','), signatures=(constructors.get(m[1]) || []).filter(s=>s.length===args.length);
+      if (signatures.length!==1) continue;
+      let offset=m.index+m[0].indexOf('(')+1;
+      args.forEach((arg,i)=>{
+        const value=arg.trim(), access=/^([\w$]+)\s*\[[^\]\n]+\]$/.exec(value), type=signatures[0][i];
+        if (access && stringArrays.has(access[1]) && !ambiguous(access[1]) && parsers[type]) {
+          const start=offset+arg.indexOf(value);
+          patch('constructor-parse',start,start+value.length,parsers[type]+'('+value+')',
+            m[1]+' 构造器的第 '+(i+1)+' 个参数需要 '+type+'，而 '+value+' 来自 String[]，仍是字符串；使用 '+parsers[type]+'('+value+') 转成数字。');
+        }
+        offset+=arg.length+1;
+      });
+    }
+    for (const m of code.matchAll(/\b([\w$]+)\s*\+=\s*([\w$]+\s*\[[^\]\n]+\])/g)) {
+      const type=numeric.get(m[1]), array=/^[\w$]+/.exec(m[2])[0];
+      if (parsers[type] && !ambiguous(m[1]) && stringArrays.has(array) && !ambiguous(array)) {
+        const start=m.index+m[0].lastIndexOf(m[2]);
+        patch('numeric-string-add',start,start+m[2].length,parsers[type]+'('+m[2]+')',
+          m[1]+' 是 '+type+'，'+m[2]+' 是 String，不能直接 +=；先用 '+parsers[type]+' 转成数字再累加。');
+      }
+    }
+    function nearby(a,b) {
+      if (a===b || Math.abs(a.length-b.length)>1) return false;
+      if (a.length===b.length) {
+        const differences=[]; for(let i=0;i<a.length;i++) if(a[i]!==b[i]) differences.push(i);
+        return differences.length===1 || differences.length===2 && differences[1]===differences[0]+1 && a[differences[0]]===b[differences[1]] && a[differences[1]]===b[differences[0]];
+      }
+      const [short,long]=a.length<b.length?[a,b]:[b,a]; let i=0; while(i<short.length && short[i]===long[i]) i++;
+      return short.slice(i)===long.slice(i+1);
+    }
+    const standard=new Set(['System','Math','String','Integer','Double','Float','Long','Short','Byte','Character','Boolean','Arrays','Collections','Files','Path']);
+    for (const m of code.matchAll(/\b([A-Za-z_$][\w$]*)\s*\.\s*[\w$]+\s*\(/g)) {
+      // An upper-case receiver is a class name by convention (List.of, Thread.sleep), not a misspelt variable.
+      const name=m[1]; if (declared.has(name) || typeNames.has(name) || standard.has(name) || name.length<4 || /^[A-Z]/.test(name)) continue;
+      const similar=[...declared].filter(n=>n.length>=4 && nearby(n,name));
+      if (similar.length===1) patch('receiver-spelling',m.index,m.index+name.length,similar[0],
+        '未检测到 '+name+' 的声明，但检测到拼写相近的 '+similar[0]+'。这份修正版会统一使用已声明的 '+similar[0]+'；请核对作用域和题目要求。');
+    }
+    for (const m of code.matchAll(/^[ \t]*([A-Za-z_$][\w$]*)\s*\.\s*toString\s*\(\s*\)\s*;[ \t]*$/gm)) {
+      const start=m.index+m[0].indexOf(m[1]), call=m[0].trim();
+      patch('discarded-tostring',start,m.index+m[0].trimEnd().length,'System.out.println('+call.slice(0,-1)+');',
+        '可选输出建议：独立调用 '+m[1]+'.toString(); 是合法语句，不一定需要打印。只有题目要求显示记录时才包上 System.out.println(...)；会增加输出，默认不应用。');
+    }
+    for (const t of types) {
+      const body=code.slice(t.open+1,t.end);
+      for (const field of body.matchAll(/\bprivate\s+static\s+(?:int|long)\s+([\w$]+)\b/g)) {
+        const name=field[1], getter=new RegExp('\\bpublic\\s+static\\s+(?:int|long)\\s+([\\w$]+)\\s*\\(\\s*\\)\\s*\\{\\s*return\\s+'+esc(name)+'\\s*;\\s*}').exec(body);
+        if (!getter) continue;
+        const declarations=[...code.matchAll(new RegExp('\\b(?:int|long|double|float|String)\\s+'+esc(name)+'\\b','g'))];
+        if (declarations.length!==1) continue;
+        for (const m of code.matchAll(new RegExp('\\b'+esc(name)+'\\b','g'))) {
+          if (m.index>=t.start && m.index<=t.end || /[\w$.]/.test(code[m.index-1] || '')) continue;
+          patch('private-count-getter',m.index,m.index+name.length,t.name+'.'+getter[1]+'()',
+            name+' 是 '+t.name+' 的 private static 字段，在外部不能直接使用；已有公开访问方法 '+t.name+'.'+getter[1]+'()。');
+        }
+      }
+    }
+    if (mode!=='snippet') {
+      const baseName=/^([A-Za-z_$][\w$]*)\.java$/.exec(filename)?.[1];
+      if (baseName) {
+        const missingKeyword=/^[ \t]*((?:(?:public|protected|private|final|abstract)\s+)*)([A-Z][\w$]*)[ \t]*\{/m.exec(code);
+        if (missingKeyword && depthAt(missingKeyword.index)===0) {
+          const actualName=missingKeyword[2], start=missingKeyword.index+missingKeyword[0].lastIndexOf(actualName);
+          patch('class-keyword',start,start,'class ',
+            '这一行缺少 class 关键字，补为 class '+actualName+' { ... }，保留现有类名。若是 public 类，文件名也应为 '+actualName+'.java。');
+        }
+        const missingName=/^[ \t]*((?:(?:public|protected|private|final|abstract)\s+)*class)[ \t]*\{/m.exec(code);
+        if (missingName && depthAt(missingName.index)===0) {
+          const start=missingName.index+missingName[0].lastIndexOf('{');
+          patch('class-name',start,start,baseName+' ',
+            'class 后面缺少类名。按文件名 '+baseName+'.java，这里应补上 '+baseName+'。');
+        }
+        const declaration=/^[ \t]*((?:(?:public|protected|private|final|abstract)\s+)*class\s+[A-Za-z_$][\w$]*(?:\s+extends\s+[\w$.,<>\s]+)?(?:\s+implements\s+[\w$.,<>\s]+)?)[ \t]*$/m.exec(code);
+        if (declaration) {
+          const after=code.slice(declaration.index+declaration[0].length).match(/\S/);
+          if (!after || after[0] !== '{') {
+            const start=declaration.index+declaration[0].trimEnd().length;
+            patch('class-opening-brace',start,start,' {',
+              '类声明后面缺少开始大括号 {。请把它补在类声明末尾，而不是只依靠方法的大括号。');
+          }
+        }
+      }
+      let depth=0, offset=0, first=-1, firstMethod=-1, firstMember=-1;
+      const methodHeader=/^(?:(?:public|protected|private|static|final|abstract|synchronized)\s+)*(?:[\w$<>\[\],.\s]+?\s+)?[A-Za-z_$][\w$]*\s*\([^;{}]*\)\s*(?:throws\s+[\w$.,\s]+)?\{$/;
+      const memberHeader=/^(?:(?:public|private|protected|static|final|transient|volatile)\s+)*(?:String|int|double|long|float|boolean|char|Scanner|[A-Z][\w$]*(?:<[^>\n]+>)?)(?:\s*\[\s*\])?\s+[\w$]+\s*(?:=|;)/;
+      for (const line of code.split('\n')) {
+        const trimmed=line.trim(), indent=offset+line.search(/\S/);
+        if (depth===0) {
+          if (firstMethod<0 && methodHeader.test(trimmed)) firstMethod=indent;
+          if (firstMember<0 && memberHeader.test(trimmed)) firstMember=indent;
+          if (/^(?:(?:final\s+)?(?:String|int|double|long|float|boolean|char)(?:\s*\[\s*\])?\s+[\w$]+\s*=|(?:for|while|if)\s*\(|System\s*\.\s*out\s*\.)/.test(trimmed) && first<0) first=indent;
+        }
+        for (const char of line) { if(char==='{') depth++; else if(char==='}') depth--; }
+        offset+=line.length+1;
+      }
+      const newline=source.includes('\r\n')?'\r\n':'\n', lineStart=index=>source.lastIndexOf('\n',index-1)+1;
+      if (firstMethod>=0 && baseName && !typeNames.has(baseName)) {
+        const start=lineStart(Math.min(firstMethod, firstMember>=0 ? firstMember : firstMethod));
+        let tailBalance=0, minimum=0; for(const ch of code.slice(start)) { if(ch==='{') tailBalance++; else if(ch==='}') tailBalance--; minimum=Math.min(minimum,tailBalance); }
+        const canWrap=tailBalance===0 && minimum===0 || tailBalance===-1 && minimum===-1 && /}\s*$/.test(code);
+        // A single stray closing brace at the end already belonged to the deleted class header: reuse it as the class end.
+        const last=code.lastIndexOf('}'), tail=tailBalance===-1?source.slice(start,last)+source.slice(last+1):source.slice(start);
+        if(canWrap) patch('missing-class-shell',start,source.length,
+          'public class '+baseName+' {'+newline+indentBlock(tail.trimEnd(),'    ',newline)+newline+'}'+newline,
+          '方法/字段出现在类的大括号外面。Java 的方法和实例字段必须放在一个类里面；这份草稿会按文件名补上 public class '+baseName+'，并把后面的成员移入类中。');
+        else add('missing-class-shell',start,'检测到类外方法，但括号还存在其他冲突。请先确定类和方法边界；不会猜测补齐多个括号。',null,'error');
+      }
+      if (first>=0) {
+        const name=baseName, start=lineStart(first), tail=code.slice(start);
+        const canWrap=name && !typeNames.has(name) && depth===0 && !/\b(?:class|interface|enum|record)\s+[\w$]+/.test(tail) && !/\bpublic\s+(?:(?:abstract|final)\s+)?(?:class|interface|enum|record)\s+/.test(code);
+        const message='这里已在类的大括号外面。Java 17 不能在文件顶层直接写变量、for 循环或打印语句；运行代码应放入 public static void main(String[] args) 方法内。先修结构，才能继续看后面的类型错误。';
+        if(canWrap) patch('top-level-statements',start,source.length,'public class '+name+' {'+newline+'    public static void main(String[] args) {'+newline+
+          indentBlock(source.slice(start).trimEnd(),'        ',newline)+newline+'    }'+newline+'}'+newline,message+' 此草稿按文件名新增 '+name+' 入口类。');
+        else add('top-level-statements',start,message,null,'error');
+      }
+    }
+    const knownImports={ArrayList:'java.util.ArrayList',List:'java.util.List',Map:'java.util.Map',HashMap:'java.util.HashMap',Set:'java.util.Set',HashSet:'java.util.HashSet',Iterator:'java.util.Iterator',Scanner:'java.util.Scanner',Arrays:'java.util.Arrays',Collections:'java.util.Collections',BufferedReader:'java.io.BufferedReader',PrintWriter:'java.io.PrintWriter',File:'java.io.File',IOException:'java.io.IOException',FileNotFoundException:'java.io.FileNotFoundException',Files:'java.nio.file.Files',Path:'java.nio.file.Path',StandardCharsets:'java.nio.charset.StandardCharsets'};
+    let importAt=0;
+    for(const m of code.matchAll(/\b(?:package\s+[\w.]+|import\s+(?:static\s+)?[\w.*]+)\s*;/g)) importAt=m.index+m[0].length;
+    for(const [name,qualified] of Object.entries(knownImports)) {
+      if(typeNames.has(name)) continue;
+      const namespace=qualified.slice(0,qualified.lastIndexOf('.'));
+      if(new RegExp('\\bimport\\s+(?:'+esc(qualified)+'|'+esc(namespace)+'\\.\\*)\\s*;').test(code)) continue;
+      const usage=new RegExp('\\b'+name+'\\b(?:\\s*<[^;{}()\n]+>)?(?:\\s*\\[\\s*\\])?\\s*(?:[A-Za-z_$][\\w$]*|\\(|\\.)','g');
+      const match=[...code.matchAll(usage)].find(m=>code[m.index-1]!=='.');
+      if(!match) continue;
+      add('missing-import',match.index,'检测到 '+name+'，未发现相应 import。若要使用 JDK 标准类型，可添加 import '+qualified+';；若它是题目自定义类，请勿添加此 import。',
+        {start:importAt,end:importAt,replacement:(importAt?'\n':'')+'import '+qualified+';\n'},'hint',{importName:name});
+    }
+    for(const m of code.matchAll(/\b(?:public\s+|protected\s+|private\s+)?(?:(?:static|final|synchronized)\s+)*(int|double|long|float|boolean|char|String|[A-Z][\w$]*(?:<[^>]+>)?(?:\[\])?)\s+([\w$]+)\s*\([^()]*\)\s*(?:throws\s+[\w$.,\s]+)?\{/g)) {
+      const open=m.index+m[0].lastIndexOf('{'),end=closeBrace(code,open);
+      if(end<0) continue;
+      const body=code.slice(open+1,end);
+      if(!/\b(?:return|throw)\b/.test(body) && !/\bwhile\s*\(\s*true\s*\)|\bfor\s*\(\s*;\s*;\s*\)/.test(body) && m[2]!=='toString') add('missing-return',m.index,'方法 '+m[2]+'() 声明返回 '+m[1]+'，但方法体内没有 return。统计方法通常在循环之后返回统计变量；需要按题意确定返回值，不自动填 0。',null,'warning');
+    }
+    for(const m of code.matchAll(/\b(?:public|private|protected)\s+([A-Z][\w$]*)\s*\([^()]*\)\s*\{/g)) {
+      const owner=types.filter(t=>m.index>t.open && m.index<t.end).sort((a,b)=>b.open-a.open)[0];
+      if(owner && m[1]!==owner.name && nearby(m[1],owner.name)) {
+        const start=m.index+m[0].indexOf(m[1]);
+        patch('constructor-name',start,start+m[1].length,owner.name,'检测到 '+m[1]+'(...) 没有返回类型，且名称不等于类 '+owner.name+'。若它应是构造器，可改为 '+owner.name+'；若应是普通方法，则补返回类型。会影响方法签名，默认不应用。');
+      }
+    }
+    return issues;
+  }
+  function generate(source,filename,mode,options) {
+    options=options || {};
+    const original=source, steps=[], seen=new Set();
+    for(let pass=0;pass<8;pass++) {
+      const issues=rules().analyse(source,filename,mode).filter(i=>isAutomatic(i) || i.id==='missing-import' && i.patch &&
+        !(options.projectTypes || []).includes(i.importName) && (options.compilerDiagnostics || []).some(d=>/cant.resolve|doesnt.exist/.test(d.code || '') && new RegExp('\\b'+esc(i.importName)+'\\b').test(d.message || '')));
+      const selected=[];
+      for(const issue of issues.sort((a,b)=>(a.patch.end-a.patch.start)-(b.patch.end-b.patch.start))) {
+        const p=issue.patch;
+        if (selected.some(i=>p.start<i.patch.end && i.patch.start<p.end || p.start===i.patch.start)) continue;
+        selected.push(issue);
+      }
+      if(!selected.length) break;
+      const next=rules().applyPatches(source,selected.map(i=>i.patch));
+      if(next===source) break;
+      for(const issue of selected) if(!seen.has(issue.id+issue.message)) { seen.add(issue.id+issue.message); steps.push(issue.message); }
+      source=next;
+    }
+    return {source,changed:source!==original,steps,remaining:rules().analyse(source,filename,mode)};
+  }
+  function complete(source,caret) {
+    const prefix=source.slice(0,caret), state=rules().maskJava(prefix).state;
+    if(state!=='code') return {start:caret,end:caret,items:[]};
+    const word=/[A-Za-z_$][\w$]*$/.exec(prefix), fragment=word?word[0]:'', start=caret-fragment.length;
+    const receiver=/([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\.$/.exec(prefix.slice(0,start));
+    let words;
+    if(receiver) {
+      const name=receiver[1], code=rules().maskJava(source).text;
+      if(name==='System.out') words=['println','print','printf'];
+      else if(name==='System') words=['out','in','err'];
+      else if(name==='Math') words=['PI','abs','max','min','sqrt','pow'];
+      else if(new RegExp('\\bString\\s+'+esc(name)+'\\b').test(code)) words=['length','split','substring','contains','equals','trim','charAt','toUpperCase','toLowerCase'];
+      else if(new RegExp('\\b[\\w$]+\\s*\\[\\s*\\]\\s+'+esc(name)+'\\b').test(code)) words=['length'];
+      else if(new RegExp('\\b(?:ArrayList|List)\\s*<[^>]+>\\s+'+esc(name)+'\\b').test(code)) words=['add','get','size','remove','contains','isEmpty'];
+      else words=[];
+    } else {
+      words=['public','private','protected','class','static','void','int','double','boolean','String','return','null','new','if','else','for','while','extends','implements','abstract','interface','this','super','System','ArrayList','sout','psvm'];
+      for(const m of rules().maskJava(source).text.matchAll(/\b(?:[A-Z][\w$]*|int|double|boolean|char)\s+([A-Za-z_$][\w$]*)/g)) words.push(m[1]);
+    }
+    return {start,end:caret,items:[...new Set(words)].filter(w=>w.startsWith(fragment) && (w!==fragment || w==='sout' || w==='psvm')).slice(0,10).map(label=>{
+      if(label==='sout') return {label,insert:'System.out.println();',back:2,detail:'打印一行'};
+      if(label==='psvm') return {label,insert:'public static void main(String[] args) {\n    \n}',back:2,detail:'main 入口方法'};
+      return {label,insert:label,back:0,detail:receiver?'名称补全，请自行填写参数':'关键字 / 已声明名称'};
+    })};
+  }
+  const api={patterns,generate,complete,isAutomatic};
+  root.JavaOfflineFixes=api;
+  if(typeof module!=='undefined' && module.exports) module.exports=api;
+})(typeof globalThis!=='undefined'?globalThis:this);
+</script>
+<script>(function () {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const rules = JavaOfflineRules;
+  const broken = `public class Main {
+    public static int countNegative(int[] values) {
+        int count = 0
+        for (int i = 0; i < values.length; i++) {
+            if values[i] < 0 {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static void main(String[] args) {
+        System.out.printIn(countNegative(new int[]{-3, 0, 5, -1}));
+    }
+}
+`;
+  const valid = `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello, EIE3320!");
+    }
+}
+`;
+  let files = [{name: 'Main.java', source: valid}], active = 0, last = [], preview = null, undo = null;
+  let token = null, busy = false, revision = 0;
+  let completion = null, completionIndex = 0;
+  let draftTimer = null;
+  // After a rule check, edits re-run the rules automatically; compiler results are only refreshed on request.
+  let liveRules = false, liveTimer = null;
+  const draftKey='eie3320_java_checker_draft_v2';
+  const local = location.protocol === 'http:' && location.hostname === '127.0.0.1';
+  function status(message) { $('status').textContent = message; }
+  function save() { files[active].source = $('source').value; files[active].name = $('filename').value.trim(); }
+  function invalidate() {
+    revision++; preview = null; $('preview').hidden = true;
+    $('issues').classList.remove('compiledClean');
+    clearTimeout(liveTimer);
+    if (liveRules) { $('resultLabel').textContent = '代码已更改，正在重新检查…'; liveTimer = setTimeout(() => analyse(true), 600); }
+    else { $('resultLabel').textContent = '代码已更改，请重新检查'; last = []; $('issues').replaceChildren(); }
+    queueDraft();
+  }
+  function writeDraft() {
+    try { localStorage.setItem(draftKey,JSON.stringify({files,active,mode:$('mode').value,saved:new Date().toISOString()})); $('draftState').textContent='已自动保存到本机浏览器'; $('restoreDraft').disabled=false; }
+    catch(e) { $('draftState').textContent='浏览器不允许保存草稿，请及时下载'; }
+  }
+  function queueDraft() { clearTimeout(draftTimer); draftTimer=setTimeout(writeDraft,400); }
+  function readDraft() {
+    try {
+      const data=JSON.parse(localStorage.getItem(draftKey) || 'null');
+      if(!data || !Array.isArray(data.files) || data.files.length<1 || data.files.length>20 || data.files.some(f=>typeof f.name!=='string' || typeof f.source!=='string' || f.source.length>300000)) return null;
+      return data;
+    } catch(e) { return null; }
+  }
+  function tabs() {
+    $('tabs').replaceChildren();
+    files.forEach((f, i) => {
+      const button = document.createElement('button'); button.textContent = f.name || '(未命名)';
+      button.className = i === active ? 'tab selected' : 'tab';
+      button.setAttribute('aria-pressed', i === active ? 'true' : 'false');
+      button.onclick = () => { save(); active = i; load(); invalidate(); };
+      $('tabs').append(button);
+    });
+    $('fileCount').textContent = files.length + ' / 20 个文件';
+    $('compileAll').textContent = '编译全部（' + files.length + ' 个）';
+    $('compileScope').textContent = '当前：' + (files[active].name || '未命名') + '。独立程序用“编译当前文件”；相互依赖的类用“编译全部”。导入文件会加入列表，旧文件仍保留。';
+  }
+  function numbers() {
+    $('numbers').textContent = Array.from({length: $('source').value.split('\n').length}, (_, i) => i + 1).join('\n');
+    $('numbers').scrollTop = $('source').scrollTop;
+  }
+  function load() { $('source').value = files[active].source; $('filename').value = files[active].name; hideCompletions(); tabs(); numbers(); }
+  function hideCompletions() { completion = null; $('completions').hidden = true; $('source').setAttribute('aria-expanded','false'); }
+  function showCompletions(force) {
+    const el=$('source');
+    if(el.selectionStart!==el.selectionEnd) { hideCompletions(); return; }
+    const result=JavaOfflineFixes.complete(el.value,el.selectionStart);
+    if(!result.items.length || !force && result.end-result.start<2 && el.value[el.selectionStart-1]!=='.') { hideCompletions(); return; }
+    completion=result; completionIndex=0; renderCompletions();
+  }
+  function renderCompletions() {
+    $('completions').replaceChildren();
+    completion.items.forEach((item,i)=>{
+      const button=document.createElement('button'); button.type='button'; button.setAttribute('role','option');
+      button.setAttribute('aria-selected',i===completionIndex?'true':'false'); button.textContent=item.label+' — '+item.detail;
+      button.onmousedown=event=>event.preventDefault(); button.onclick=()=>acceptCompletion(i); $('completions').append(button);
+    });
+    $('completions').hidden=false; $('source').setAttribute('aria-expanded','true');
+  }
+  // insertText keeps the browser's own Ctrl+Z history; setRangeText is the fallback where it is unavailable.
+  function replaceText(start, end, text, caret) {
+    const el = $('source'); el.focus(); el.setSelectionRange(start, end);
+    if (!document.execCommand('insertText', false, text)) { el.setRangeText(text, start, end, 'end'); el.dispatchEvent(new Event('input')); }
+    if (caret !== undefined) el.setSelectionRange(caret, caret);
+    hideCompletions();
+  }
+  function indentLines(outdent) {
+    const el = $('source'), value = el.value, a = el.selectionStart, b = el.selectionEnd;
+    if (!outdent && !value.slice(a, b).includes('\n')) { replaceText(a, b, '    '); return; }
+    const from = value.lastIndexOf('\n', a - 1) + 1, last = b > a && value[b - 1] === '\n' ? b - 1 : b;
+    const to = value.indexOf('\n', last) < 0 ? value.length : value.indexOf('\n', last);
+    const block = value.slice(from, to).split('\n').map(l => outdent ? l.replace(/^(?: {1,4}|\t)/, '') : l ? '    ' + l : l).join('\n');
+    if (block === value.slice(from, to)) return;
+    replaceText(from, to, block); el.setSelectionRange(from, from + block.length);
+  }
+  function newLine() {
+    const el = $('source'), value = el.value, a = el.selectionStart, b = el.selectionEnd;
+    const line = value.slice(value.lastIndexOf('\n', a - 1) + 1, a), base = /^[ \t]*/.exec(line)[0];
+    const opens = /\{\s*$/.test(line), closes = opens && /^[ \t]*}/.test(value.slice(b));
+    const inner = '\n' + base + (opens ? '    ' : '');
+    replaceText(a, b, inner + (closes ? '\n' + base : ''), a + inner.length);
+  }
+  function acceptCompletion(i) {
+    if(!completion) return; const result=completion, item=result.items[i];
+    const caret=result.start+item.insert.length-item.back;
+    replaceText(result.start,result.end,item.insert,caret);
+  }
+  function focusIssue(issue) {
+    save(); const index = files.findIndex(f => f.name === issue.filename.replace(/^.*\//, ''));
+    if (index >= 0) active = index;
+    load(); const lines = $('source').value.split('\n');
+    const line = Math.max(0, Math.min(lines.length - 1, Number(issue.line || 1) - 1));
+    const offset = lines.slice(0, line).reduce((n, s) => n + s.length + 1, 0) + Math.max(0, Number(issue.column || 1) - 1);
+    $('source').focus(); $('source').setSelectionRange(offset, offset + 1);
+    $('source').scrollTop = Math.max(0, line * 24 - 96); $('numbers').scrollTop = $('source').scrollTop;
+  }
+  function issueCard(issue, compiler, candidate) {
+    const li = document.createElement('li'), jump = document.createElement('button');
+    li.className = 'issue ' + (compiler ? issue.kind === 'ERROR' ? 'error' : 'warning' : issue.severity);
+    jump.className = 'jump'; jump.textContent = (issue.filename || '项目') + (issue.line > 0 ? ' · 行 ' + issue.line + ' / 列 ' + issue.column : ' · 无具体行号');
+    jump.onclick = () => candidate ? $('after').scrollIntoView({block:'center'}) : focusIssue(issue); li.append(jump);
+    const message = document.createElement('p'); message.textContent = issue.message; li.append(message);
+    const note = document.createElement('small');
+    note.textContent = compiler ? rules.compilerHelp(issue) : issue.patch ? JavaOfflineFixes.isAutomatic(issue)?'可生成语法修正草稿；应用前仍需核对。':'仅供人工选择的建议，可能改变输出、变量或方法含义；默认不应用。' : '请结合题目检查此处。';
+    li.append(note); return li;
+  }
+  function analyse(live) {
+    clearTimeout(liveTimer); liveRules = true;
+    save(); preview = null; $('preview').hidden = true;
+    $('issues').classList.remove('compiledClean');
+    last = files.flatMap(f => rules.analyse(f.source, f.name, $('mode').value));
+    $('issues').replaceChildren(...last.map(i => issueCard(i, false)));
+    $('resultLabel').textContent = '全部 ' + files.length + ' 个文件 · ' + (last.length ? '规则提示：' + last.length + ' 项' : '规则暂未发现问题（尚未证明能够编译）') + (live === true ? ' · 已随编辑自动更新' : '');
+    if (live !== true) status('检查在浏览器本地完成。' + last.filter(i => JavaOfflineFixes.isAutomatic(i)).length + ' 项可生成语法修正；其他建议需要你逐项选择。之后的编辑会自动重新做规则检查。');
+    return last;
+  }
+  function updatePreview() {
+    if (!preview) return;
+    const chosen = new Set([...$('patches').querySelectorAll('input:checked')].map(el => Number(el.value)));
+    try {
+      preview.after = preview.before.map(f => ({...f, source: rules.applyPatches(f.source,
+        preview.fixes.filter((p, i) => chosen.has(i) && p.filename === f.name).map(p => p.patch))}));
+      $('before').textContent = preview.before.map(f => '// ' + f.name + '\n' + f.source).join('\n');
+      $('after').textContent = preview.after.map(f => '// ' + f.name + '\n' + f.source).join('\n');
+      $('apply').disabled = chosen.size === 0;
+      preview.revision=(preview.revision || 0)+1;
+      preview.validated=false;
+      $('apply').textContent=preview.generated?'应用语法修正草稿':'应用所选修改';
+      $('downloadCandidate').textContent='下载修正版草稿';
+      $('candidateControls').hidden=!preview.generated;
+      $('candidateStatus').textContent=preview.generated?'修正版草稿：尚未通过 JDK 验证。请查看改动，不能把生成草稿当作正确答案。':'';
+      $('candidateIssues').replaceChildren();
+    } catch (e) { $('after').textContent = e.message; $('apply').disabled = true; }
+  }
+  $('analyse').onclick = () => analyse();
+  $('showFixes').onclick = () => {
+    const issues = analyse(), fixes = issues.filter(i => i.patch);
+    if (!fixes.length) { status('没有可自动替换的建议。请按提示人工修改，或使用 JDK 编译查看准确错误。'); return; }
+    const names = files.map(f => f.name);
+    if (new Set(names).size !== names.length) { status('请先给每个文件设置不同的文件名。'); return; }
+    preview = {before: files.map(f => ({...f})), fixes}; $('patches').replaceChildren();
+    fixes.forEach((issue, i) => {
+      const label = document.createElement('label'), check = document.createElement('input'), span = document.createElement('span');
+      check.type = 'checkbox'; check.value = i; check.checked = JavaOfflineFixes.isAutomatic(issue); check.onchange = updatePreview;
+      span.textContent = (check.checked?'[语法修正] ':'[需人工确认，默认不选] ')+issue.filename + ':' + issue.line + ' — ' + issue.message;
+      label.append(check, span); $('patches').append(label);
+    });
+    $('preview').hidden = false; updatePreview(); $('preview').scrollIntoView({behavior:'smooth', block:'start'});
+  };
+  $('generate').onclick = async () => {
+    if(busy) { status('请等待当前编译完成后再生成修正版。'); return; }
+    save(); hideCompletions();
+    if(new Set(files.map(f=>f.name)).size!==files.length) { status('请先给每个文件设置不同的文件名。'); return; }
+    const f={...files[active]}, scope=$('repairScope').value, snapshot=revision;
+    let compilerDiagnostics=[];
+    if(local && $('mode').value==='file') {
+      busy=true; $('generate').disabled=true; setCompileEnabled(false);
+      try {
+        if(!token) await connect();
+        if(token) {
+          status('正在先编译原代码；能编译时保留原代码，不强行生成修改。');
+          const result=await requestCompilation(scope==='all'?files:[f]);
+          if(snapshot!==revision) { status('检查期间代码已改变，请重新生成。'); return; }
+          compilerDiagnostics=result.diagnostics;
+          if(result.success) {
+            analyse(); $('resultLabel').textContent='原代码 JDK 编译通过：保持原代码，不生成修改';
+            status('原代码已通过语法和类型检查。仍可查看逻辑建议，但不会自动增加打印或改变原有含义；请运行并核对题目输出。');
+            return;
+          }
+        }
+      } catch(e) {
+        if(e.connectionLost) { token=null; $('connection').textContent='本机服务已断开 · 请重新连接'; $('jdkHelp').hidden=false; }
+        status('JDK 初检未完成：'+e.message+'。继续提供浏览器内的语法草稿，尚未验证。');
+      }
+      finally { busy=false; $('generate').disabled=false; setCompileEnabled(Boolean(token)); }
+    }
+    if(snapshot!==revision) { status('代码已改变，请重新生成。'); return; }
+    const projectTypes=files.flatMap(file=>[...rules.maskJava(file.source).text.matchAll(/\b(?:class|interface|enum|record)\s+([\w$]+)/g)].map(m=>m[1]));
+    const result=JavaOfflineFixes.generate(f.source,f.name,$('mode').value,{compilerDiagnostics,projectTypes});
+    if(!result.changed) { analyse(); $('issues').append(...compilerDiagnostics.map(d=>issueCard(d,true))); if(compilerDiagnostics.some(d=>d.kind==='ERROR')) $('resultLabel').textContent='原代码 JDK 编译失败：请查看错误与人工修改建议'; status('未发现能自动处理的明确语法修正。可在“逐项建议”里人工选择修改；不要把未发现规则问题当作已经正确。'); return; }
+    liveRules=false; $('issues').replaceChildren(...compilerDiagnostics.map(d=>issueCard(d,true)));
+    $('resultLabel').textContent=compilerDiagnostics.some(d=>d.kind==='ERROR')?'原代码的 JDK 错误（修正版验证结果见下方）':'已生成语法草稿：验证结果见下方';
+    preview={before:files.map(f=>({...f})),fixes:[{filename:f.name,patch:{start:0,end:f.source.length,replacement:result.source}}],generated:true,active};
+    $('patches').replaceChildren();
+    const label=document.createElement('label'),check=document.createElement('input'),span=document.createElement('span');
+    check.type='checkbox'; check.value='0'; check.checked=true; check.onchange=updatePreview;
+    span.textContent='应用 '+f.name+' 的修正版草稿（修改说明如下；不改动其他文件）'; label.append(check,span); $('patches').append(label);
+    const list=document.createElement('ol'); for(const step of result.steps) { const li=document.createElement('li'); li.textContent=step; list.append(li); } $('patches').append(list);
+    $('preview').hidden=false; updatePreview(); $('preview').scrollIntoView({behavior:'smooth',block:'start'});
+    $('candidateScope').value=scope;
+    if(token && $('mode').value==='file') await compile(scope,true);
+    else status('已生成修正版草稿，可预览、应用和下载。尚未通过 JDK 验证；启动本机编译器后再验证。');
+  };
+  $('verifyCandidate').onclick=()=>compile($('candidateScope').value,true);
+  $('downloadCandidate').onclick=()=>{
+    if(!preview?.generated) return;
+    const f=preview.after[preview.active];
+    if(!/^[A-Za-z_$][\w$]*\.java$/.test(f.name)) { status('请先设置有效的 .java 文件名。'); return; }
+    downloadFile(f); status(preview.validated?'已下载通过 JDK 编译的修正版。请在 IDE 中运行并核对题目输出。':'已下载修正版草稿。是否编译通过请以预览区验证结果为准。');
+  };
+  $('apply').onclick = () => {
+    if (!preview) return;
+    undo = preview.before.map(f => ({...f})); files = preview.after.map(f => ({...f}));
+    $('undo').disabled = false; load(); invalidate(); analyse(); status('已应用所选修正。请再编译，并用题目样例检查结果。');
+  };
+  $('undo').onclick = () => { if (!undo) return; files = undo; undo = null; active = Math.min(active, files.length - 1); load(); invalidate(); $('undo').disabled = true; status('已撤销上次应用的修正。'); };
+  $('source').oninput = () => { save(); numbers(); invalidate(); showCompletions(false); };
+  $('source').onscroll = () => { $('numbers').scrollTop = $('source').scrollTop; };
+  $('source').onkeydown = event => {
+    if (event.isComposing || event.keyCode === 229) return;
+    if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') { event.preventDefault(); hideCompletions(); analyse(); return; }
+    if(event.ctrlKey && event.code==='Space') { event.preventDefault(); showCompletions(true); return; }
+    if(completion && ['ArrowDown','ArrowUp','Enter','Tab','Escape'].includes(event.key)) {
+      event.preventDefault();
+      if(event.key==='Escape') hideCompletions();
+      else if(event.key==='Enter' || event.key==='Tab') acceptCompletion(completionIndex);
+      else { completionIndex=(completionIndex+(event.key==='ArrowDown'?1:-1)+completion.items.length)%completion.items.length; renderCompletions(); }
+      return;
+    }
+    if (event.key === 'Tab' && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); indentLines(event.shiftKey); return; }
+    if (event.key === 'Enter' && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) { event.preventDefault(); newLine(); }
+  };
+  $('complete').onclick=()=>{ $('source').focus(); showCompletions(true); };
+  $('filename').oninput = () => { save(); tabs(); invalidate(); };
+  $('mode').onchange = invalidate;
+  $('add').onclick = () => {
+    save(); if (files.length >= 20) { status('最多同时检查 20 个文件。'); return; }
+    let n = 1; while (files.some(f => f.name === 'Class' + n + '.java')) n++;
+    files.push({name: 'Class' + n + '.java', source: ''}); active = files.length - 1; load(); invalidate();
+  };
+  $('remove').onclick = () => {
+    save(); if (files.length === 1) { status('至少保留一个文件。'); return; }
+    files.splice(active, 1); active = Math.min(active, files.length - 1); load(); invalidate();
+  };
+  // Editors on Chinese Windows often save GBK; use it when the bytes are not valid UTF-8.
+  async function readJavaFile(file) {
+    const bytes = await file.arrayBuffer();
+    try { return {name: file.name, source: new TextDecoder('utf-8', {fatal: true}).decode(bytes)}; }
+    catch (e) {
+      try { return {name: file.name, source: new TextDecoder('gbk').decode(bytes), gbk: true}; }
+      catch (unsupported) { return {name: file.name, source: new TextDecoder().decode(bytes)}; }
+    }
+  }
+  $('upload').onchange = async event => {
+    save(); const incoming = [...event.target.files];
+    try {
+      if (incoming.length > 20) throw new Error('一次最多导入 20 个 .java 文件。');
+      for (const f of incoming) {
+        if (!/\.java$/i.test(f.name) || f.size > 300000) throw new Error('只接受不超过 300 KB 的 .java 文件。');
+      }
+      const decoded = await Promise.all(incoming.map(readJavaFile));
+      const gbkNames = decoded.filter(f => f.gbk).map(f => f.name);
+      const imported = decoded.map(f => ({name: f.name, source: f.source}));
+      const merged = files.map(f => ({...f}));
+      for (const f of imported) { const i = merged.findIndex(x => x.name === f.name); if (i < 0) merged.push(f); else merged[i] = f; }
+      if (merged.length > 20) throw new Error('请先移除不需要的文件；最多 20 个。');
+      undo = files.map(f => ({...f})); $('undo').disabled = false;
+      files = merged; active = Math.max(0, files.findIndex(f => f.name === imported[0]?.name)); load(); invalidate();
+      status('已导入并选中 ' + files[active].name + '。独立文件请点“编译当前文件”；“编译全部”会同时检查列表中的旧文件。硬盘原文件没有改变。' +
+        (gbkNames.length ? ' ' + gbkNames.join('、') + ' 不是 UTF-8，已按 GBK 读取；下载时保存为 UTF-8。' : ''));
+    } catch (e) { status(e.message); }
+    event.target.value = '';
+  };
+  function downloadFile(f) {
+    const blob = new Blob([f.source], {type:'text/plain;charset=utf-8'}), url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = f.name; a.click(); setTimeout(() => URL.revokeObjectURL(url), 3000);
+  }
+  $('download').onclick = () => {
+    save(); const f = files[active];
+    if (!/^[A-Za-z_$][\w$]*\.java$/.test(f.name)) { status('请使用有效文件名，例如 Main.java。'); return; }
+    downloadFile(f);
+    status('已下载当前文件。请把下载结果放回题目对应文件夹。');
+  };
+  $('example').onclick = () => {
+    save(); undo = files.map(f => ({...f})); $('undo').disabled = false;
+    files = [{name:'Main.java', source:broken}]; active = 0; load(); invalidate(); analyse();
+    status('练习示例已载入。先查看规则提示，再预览修正；可撤销返回原代码。');
+  };
+  $('renameFile').onclick=()=>{
+    save(); const name=/\bpublic\s+(?:(?:abstract|final)\s+)?(?:class|interface|enum|record)\s+([A-Za-z_$][\w$]*)/.exec(rules.maskJava(files[active].source).text)?.[1];
+    if(!name) { status('没有找到 public 顶层类型，请按题目要求设置文件名。'); return; }
+    const filename=name+'.java';
+    if(files.some((f,i)=>i!==active && f.name===filename)) { status('列表里已有 '+filename+'，请先处理同名文件。'); return; }
+    undo=files.map(f=>({...f})); $('undo').disabled=false;
+    files[active].name=filename; load(); invalidate(); status('编辑器文件名已改为 '+filename+'；类名和方法头未改动。下载时请保留此文件名。');
+  };
+  $('restoreDraft').onclick=()=>{
+    const draft=readDraft(); if(!draft) { status('没有找到有效的本机草稿。'); return; }
+    save(); undo=files.map(f=>({...f})); $('undo').disabled=false;
+    files=draft.files; active=Number.isInteger(draft.active)?Math.max(0,Math.min(files.length-1,draft.active)):0;
+    $('mode').value=draft.mode==='snippet'?'snippet':'file'; load(); invalidate(); status('已恢复本机浏览器草稿。硬盘 .java 文件仍需下载保存。');
+  };
+  $('clearDraft').onclick=()=>{
+    clearTimeout(draftTimer); try { localStorage.removeItem(draftKey); $('restoreDraft').disabled=true; $('draftState').textContent='已清除浏览器草稿；继续编辑会重新保存'; }
+    catch(e) { status('浏览器未允许清除草稿。'); }
+  };
+  async function requestJson(url,options,timeout) {
+    const controller=new AbortController(), timer=setTimeout(()=>controller.abort(),timeout);
+    try {
+      const response=await fetch(url,{...options,signal:controller.signal});
+      const data=await response.json();
+      if(!response.ok) throw new Error(data.error || '本机服务返回 '+response.status);
+      return data;
+    } catch(e) {
+      if(e.name==='AbortError' || e.name==='TypeError') { const error=new Error(e.name==='AbortError'?'本机服务响应超时':'无法连接本机服务，请保持启动窗口打开并重新连接'); error.connectionLost=true; throw error; }
+      throw e;
+    } finally { clearTimeout(timer); }
+  }
+  async function requestCompilation(selected) {
+    const names=new Set(), body=new URLSearchParams({token,count:String(selected.length)});
+    selected.forEach((f,i)=>{
+      if(!/^[A-Za-z_$][\w$]*\.java$/.test(f.name) || names.has(f.name)) throw new Error('文件名须有效且互不重复。可用“按 public 类名改文件名”处理名称不匹配。');
+      if(f.source.length>100000) throw new Error('每个文件上限 100,000 字符。');
+      names.add(f.name); body.set('name'+i,f.name); body.set('source'+i,f.source);
+    });
+    if(new TextEncoder().encode(body.toString()).length>600000) throw new Error('本次源文件总量超过上限，请只保留一道题的文件。');
+    const data=await requestJson('/api/compile',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body},18000);
+    if(typeof data.success!=='boolean' || !Array.isArray(data.diagnostics)) throw new Error('本机服务返回格式异常，请重新启动新版启动器。');
+    return data;
+  }
+  async function connect() {
+    if (!local) {
+      $('connection').textContent = '纯网页模式 · 无需安装'; setCompileEnabled(false);
+      $('jdkHelp').hidden = false; return false;
+    }
+    try {
+      const data=await requestJson('/api/status',{cache:'no-store'},2500); token = data.token;
+      if(typeof token!=='string') throw new Error('未识别的本机服务');
+      $('connection').textContent = data.compilerAvailable ? '本机 JDK ' + data.javaVersion + ' · 已连接' : '已连接，但缺少 JDK 编译器';
+      if (!data.compilerAvailable) token = null;
+      setCompileEnabled(data.compilerAvailable); $('jdkHelp').hidden = data.compilerAvailable;
+      $('runtimeFolder').textContent=data.folder?'本机服务目录：'+data.folder:'';
+      return Boolean(token);
+    } catch (e) { token = null; $('connection').textContent = '本地编译器未连接'; setCompileEnabled(false); $('jdkHelp').hidden = false; return false; }
+  }
+  $('reconnect').onclick=async()=>{ const ok=await connect(); status(ok?'已重新连接本机 JDK。':'未连接 JDK。浏览器内规则与生成仍可用；真实编译请运行启动器并打开它显示的本机地址。'); };
+  function setCompileEnabled(enabled) { $('compile').disabled = $('compileAll').disabled = $('verifyCandidate').disabled = !enabled; }
+  async function compile(scope, candidate) {
+    if (busy || !token) return; save(); hideCompletions();
+    if ($('mode').value !== 'file') { status('片段模式只能做规则检查。请切换到完整文件，并提供类声明及依赖文件。'); return; }
+    if(candidate && !preview?.generated) return;
+    const baseFiles=candidate?preview.after:files, chosenActive=candidate?preview.active:active;
+    const selected = scope === 'current' ? [baseFiles[chosenActive]] : baseFiles.slice();
+    const scopeLabel = scope === 'current' ? '当前文件 ' + selected[0].name : '全部 ' + selected.length + ' 个文件';
+    const names = new Set();
+    for (const f of selected) {
+      if (!/^[A-Za-z_$][\w$]*\.java$/.test(f.name) || names.has(f.name)) { status('文件名须有效且互不重复，例如 Item.java、Database.java。'); return; }
+      if (f.source.length > 100000) { status('每个文件上限 100,000 字符。'); return; } names.add(f.name);
+    }
+    const version = revision;
+    const requestedPreview=preview, previewRevision=preview?.revision;
+    busy = true; $('generate').disabled=true; setCompileEnabled(false); status('本机正在编译' + scopeLabel + '；不会运行你的程序。');
+    try {
+      const data = await requestCompilation(selected);
+      if (revision !== version) { status('编译期间代码已改变。请重新编译当前版本。'); return; }
+      if(candidate) {
+        if(preview!==requestedPreview || preview?.revision!==previewRevision) { status('修正版已改变，请重新验证。'); return; }
+        $('candidateStatus').textContent=data.success?'此语法草稿的'+scopeLabel+'：JDK 编译通过 ✓（未验证逻辑和输出）':'此语法草稿仍未通过 JDK 编译：请查看以下错误及人工建议。';
+        preview.validated=data.success;
+        $('downloadCandidate').textContent=data.success?'下载已通过编译的修正版':'下载修正版草稿';
+        const remaining=selected.flatMap(f=>rules.analyse(f.source,f.name,$('mode').value)).filter(i=>!JavaOfflineFixes.isAutomatic(i));
+        $('candidateIssues').replaceChildren(...data.diagnostics.map(d=>issueCard(d,true,true)),...remaining.map(d=>issueCard(d,false,true)));
+        $('apply').textContent=data.success?'应用已通过编译的语法草稿':'应用语法草稿（仍有编译错误）';
+        status(data.success?'语法草稿已通过 JDK 编译。未自动改变输出、猜变量或填写算法；请核对剩余建议和题目样例。':'已生成部分语法修正，仍有编译错误。请在“逐项建议”选择人工修改，或按题意补齐。');
+        return;
+      }
+      $('preview').hidden = true; preview = null; liveRules = false;
+      const targeted=selected.flatMap(f=>JavaOfflineFixes.patterns(f.source,f.name,$('mode').value));
+      $('issues').replaceChildren(...targeted.map(d=>issueCard(d,false)),...data.diagnostics.map(d => issueCard(d, true)));
+      const failed = [...new Set(data.diagnostics.filter(d => d.kind === 'ERROR').map(d => d.filename).filter(Boolean))];
+      $('resultLabel').textContent = scopeLabel + (data.success ? '：JDK 编译通过 ✓（未运行程序）' : '：JDK 编译失败' + (failed.length ? ' · 错误来自 ' + failed.join('、') : ''));
+      $('issues').classList.toggle('compiledClean', data.success && data.diagnostics.length === 0);
+      status(data.success ? '本次编译范围：' + selected.map(f => f.name).join('、') + '。语法与类型检查通过，请在 IDE 运行并核对输出。' :
+        '本次编译范围：' + selected.map(f => f.name).join('、') + '。' + (scope === 'current' ? '若此类依赖其他源文件，请一起导入后点“编译全部”。' : '这是整组编译结果；其他文件出错也会导致整组失败。检查独立程序请切换到该文件后点“编译当前文件”。'));
+    } catch (e) {
+      if(e.connectionLost) { token=null; $('connection').textContent='本机服务已断开 · 请重新连接'; $('jdkHelp').hidden=false; }
+      if(candidate && preview===requestedPreview) { preview.validated=false; $('candidateStatus').textContent='尚未完成 JDK 验证：'+e.message; $('downloadCandidate').textContent='下载修正版草稿'; }
+      status('编译未完成：' + e.message + '。浏览器规则与生成仍可使用。');
+    }
+    finally { busy = false; $('generate').disabled=false; setCompileEnabled(Boolean(token)); }
+  }
+  $('compile').onclick = () => compile('current');
+  $('compileAll').onclick = () => compile('all');
+  window.addEventListener('beforeunload', event => { save(); if (files.some(f => f.source.trim() && f.source !== valid)) { clearTimeout(draftTimer); writeDraft(); event.preventDefault(); event.returnValue = ''; } });
+  load(); connect();
+  const stored=readDraft(); $('restoreDraft').disabled=!stored; $('draftState').textContent=stored?'检测到本机草稿，可点击恢复':'编辑时自动保存至本机浏览器；硬盘文件需下载';
+  status('粘贴代码或导入一道题的文件。默认先检查原代码，仅生成明确的语法修正；逻辑建议不自动勾选。');
+})();
+</script>
+</body></html>

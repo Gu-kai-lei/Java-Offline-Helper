@@ -1,0 +1,238 @@
+{
+  "version": "2.1",
+  "verified_on": "2026-10-23T11:25:00+08:00",
+  "automated_tests": {
+    "command": "node tests/run_tests.mjs --jdk",
+    "passed": 37,
+    "failed": 0,
+    "node": "v24.14.1",
+    "java_version": "17.0.11",
+    "scope": "29 rule/example/page checks plus 8 checks against the real loopback JDK service (compile, never execute, name/token/Origin/Host rejection, nothing written to disk)"
+  },
+  "false_positive_scan": {
+    "method": "Rule engine and generate() over known-valid Java sources: EIE3320 lecture source code ch01-14 (107 files) and this repository's Lab1/Lab2 code (14 files)",
+    "files": 121,
+    "automatic_patches": {
+      "2.0": 0,
+      "2.1": 0
+    },
+    "wrong_manual_suggestions": {
+      "2.0": 14,
+      "2.1": 0
+    },
+    "note": "2.0 suggested List.of, Thread.sleep and enhanced-for variables (e.g. shape -> shapes) as receiver typos"
+  },
+  "fixed_in_2_1": [
+    "automatic semicolon after an opening text block \"\"\" broke valid code",
+    "automatic semicolon before a continuation line starting with - broke valid code",
+    "!in.hasNext() on a Scanner named in was reported as an error",
+    "upper-case receivers (List.of, Thread.sleep) and enhanced-for / lambda variables were suggested as typos",
+    "missing semicolons after fields, this.x = y, generic declarations, general calls, assignments, break, do-while and import were not detected; the x++ case was unreachable",
+    "else if / while conditions without parentheses were not detected",
+    "rebuilt class shells kept the original indentation plus four spaces",
+    "compiler cleanup failures on Windows could turn a finished compilation into HTTP 500; class files are now discarded in memory",
+    "multi-line Tab replaced the selection; Tab and completion edits broke Ctrl+Z",
+    "GBK-encoded imports were shown as mojibake",
+    "diagnostics without a position showed line -1"
+  ],
+  "windows_launcher": "CHECK_WITH_JDK.cmd --no-browser started version 2.1 on 127.0.0.1:8765 with JDK 17.0.11. Automatic browser opening not tested.",
+  "browser": {
+    "tested": "Local HTTP page in the Claude desktop built-in browser (Chromium)",
+    "confirmed": [
+      "version 2.1 and JDK 17.0.11 connected",
+      "built-in broken example shows 3 rule hints; typing the missing semicolon refreshes the list to 2 without clicking",
+      "Enter after { indents the new line; Ctrl+Z restores the previous text",
+      "multi-line Tab then Shift+Tab returns the exact original text",
+      "Generate compiles the original, applies 2 syntax fixes and the candidate passes real JDK compilation",
+      "a GBK-encoded .java import is decoded correctly with a notice",
+      "no console errors"
+    ],
+    "file_url_test": "not performed: direct-file mode uses the same rule scripts and no local service"
+  },
+  "network": "No Internet hosts, CDNs, model services or package downloads. Compiler HTTP binds only 127.0.0.1. Direct-file rule mode requires no server.",
+  "limits": "Rule hints may miss or misidentify errors. Compilation checks syntax and types, not output correctness. Local JDK and permission to start loopback service are required for real compilation.",
+  "v2_0_record": {
+    "version": "2.0",
+    "verified_on": "2026-10-22T00:04:00",
+    "rules": {
+      "passed": 22,
+      "checks": [
+        "good complete class has no rule warnings",
+        "three user-like mistakes are detected and fixed",
+        "comments and literals are not rewritten",
+        "semicolon inserted before trailing comment",
+        "multi-line calls are not auto-terminated",
+        "length versus size suggestions respect known declarations",
+        "missing close brace is reported without guessed insertion",
+        "method fragment and null typo handled",
+        "declared variable named nul is not silently changed",
+        "overlapping patch rejected",
+        "packaged HTML contains valid inline JS only; no remote assets",
+        "completion knows arrays, String methods and main template",
+        "no completion inside strings or comments",
+        "compiler explanation identifies top-level Java 17 statements",
+        "existing String concatenation is not treated as numeric character arithmetic",
+        "StudentRecord conservatively fixes syntax and requires explicit semantic choices",
+        "valid output operations are not automatically rewritten",
+        "separate-scope types do not produce conflicting length fixes",
+        "deleted class with private fields or braces inside strings is repaired",
+        "imports need a compiler diagnostic and known valid names remain preserved",
+        "missing return and constructor typo have actionable nonautomatic feedback",
+        "deleted class declaration parts are detected and repaired"
+      ]
+    },
+    "compiler": {
+      "version": "2.0",
+      "passed": 11,
+      "java_version": "17.0.11",
+      "local_address": "http://127.0.0.1:8767",
+      "checks": [
+        "version 2.0 status identifies the actual served folder and full compiler",
+        "real javac rejects broken example and maps diagnostics to source lines",
+        "rule-repaired example compiles with real JDK 17",
+        "dependent multiple source files compile together",
+        "missing dependency produces an honest compiler failure",
+        "UTF-8 source and missing-return diagnostics are supported",
+        "submitted static initializers and main are never executed",
+        "path-like and duplicate source names are rejected",
+        "session token and same-origin restrictions enforced",
+        "local HTML has restrictive connection policy and no-store serving",
+        "per-compilation temporary output is cleaned"
+      ]
+    },
+    "windows_launcher": "CHECK_WITH_JDK.cmd --no-browser executed successfully with full JDK 17.0.11; printed loopback URL and started version 2.0 compiler service. Automatic browser opening not tested.",
+    "browser": {
+      "tested": "local HTTP in ChatGPT in-app browser",
+      "confirmed": [
+        "version 2.0 and JDK 17 connected",
+        "valid original remains unchanged after Generate",
+        "missing class declaration and println typo produce a complete candidate",
+        "generated candidate passes real JDK compilation"
+      ],
+      "file_url_test": "not performed: automation browser disallows file URLs; direct-file mode has no external assets and does not call the local compiler",
+      "screenshot": "docs/checker-v2-preview.jpg"
+    },
+    "network": "No Internet hosts, CDNs, model services or package downloads. Compiler HTTP binds only 127.0.0.1. Direct-file rule mode requires no server.",
+    "limits": "Rule hints may miss or misidentify errors. Compilation checks syntax and types, not output correctness. Local JDK and permission to start loopback service are required for real compilation.",
+    "student_record_generation": {
+      "version": "2.0",
+      "issues": [
+        {
+          "id": "tostring-return",
+          "line": 32,
+          "message": "toString() 的返回类型是 String。这里仅打印了内容，没有返回值；应把 System.out.println(表达式); 改成 return 表达式;，在调用处打印对象。"
+        },
+        {
+          "id": "numeric-char-concat",
+          "line": 32,
+          "message": "可选输出建议（这段语法本身合法）：id + 单引号字符会做数值相加，例如 101 + '|' 是 225。只有题目要求文本分隔符时，才改用 \"|\"；此改动会改变输出，默认不应用。"
+        },
+        {
+          "id": "top-level-statements",
+          "line": 36,
+          "message": "这里已在类的大括号外面。Java 17 不能在文件顶层直接写变量、for 循环或打印语句；运行代码应放入 public static void main(String[] args) 方法内。先修结构，才能继续看后面的类型错误。 此草稿按文件名新增 Main 入口类。"
+        },
+        {
+          "id": "array-split",
+          "line": 40,
+          "message": "data 是 String[] 数组，数组没有 split()。先取出其中一条字符串，再拆字段：data[i].split(\",\")。"
+        },
+        {
+          "id": "constructor-parse",
+          "line": 41,
+          "message": "StudentRecord 构造器的第 1 个参数需要 int，而 record[0] 来自 String[]，仍是字符串；使用 Integer.parseInt(record[0]) 转成数字。"
+        },
+        {
+          "id": "constructor-parse",
+          "line": 41,
+          "message": "StudentRecord 构造器的第 3 个参数需要 double，而 record[2] 来自 String[]，仍是字符串；使用 Double.parseDouble(record[2]) 转成数字。"
+        },
+        {
+          "id": "numeric-string-add",
+          "line": 42,
+          "message": "total 是 double，record[2] 是 String，不能直接 +=；先用 Double.parseDouble 转成数字再累加。"
+        },
+        {
+          "id": "receiver-spelling",
+          "line": 43,
+          "message": "未检测到 student 的声明，但检测到拼写相近的 studnet。这份修正版会统一使用已声明的 studnet；请核对作用域和题目要求。"
+        },
+        {
+          "id": "discarded-tostring",
+          "line": 43,
+          "message": "可选输出建议：独立调用 student.toString(); 是合法语句，不一定需要打印。只有题目要求显示记录时才包上 System.out.println(...)；会增加输出，默认不应用。"
+        },
+        {
+          "id": "private-count-getter",
+          "line": 45,
+          "message": "count 是 StudentRecord 的 private static 字段，在外部不能直接使用；已有公开访问方法 StudentRecord.getCount()。"
+        },
+        {
+          "id": "private-count-getter",
+          "line": 46,
+          "message": "count 是 StudentRecord 的 private static 字段，在外部不能直接使用；已有公开访问方法 StudentRecord.getCount()。"
+        }
+      ],
+      "automaticSteps": [
+        "StudentRecord 构造器的第 1 个参数需要 int，而 record[0] 来自 String[]，仍是字符串；使用 Integer.parseInt(record[0]) 转成数字。",
+        "StudentRecord 构造器的第 3 个参数需要 double，而 record[2] 来自 String[]，仍是字符串；使用 Double.parseDouble(record[2]) 转成数字。",
+        "total 是 double，record[2] 是 String，不能直接 +=；先用 Double.parseDouble 转成数字再累加。",
+        "data 是 String[] 数组，数组没有 split()。先取出其中一条字符串，再拆字段：data[i].split(\",\")。",
+        "toString() 的返回类型是 String。这里仅打印了内容，没有返回值；应把 System.out.println(表达式); 改成 return 表达式;，在调用处打印对象。",
+        "这里已在类的大括号外面。Java 17 不能在文件顶层直接写变量、for 循环或打印语句；运行代码应放入 public static void main(String[] args) 方法内。先修结构，才能继续看后面的类型错误。 此草稿按文件名新增 Main 入口类。"
+      ],
+      "reviewedSteps": [
+        "numeric-char-concat",
+        "receiver-spelling",
+        "private-count-getter",
+        "discarded-tostring"
+      ],
+      "note": "Fixed example additionally applies the explicitly reviewed choices; default generation does not apply these."
+    },
+    "page_interactions": {
+      "version": "2.0",
+      "method": "Node DOM/event harness executing all delivered inline scripts; not a real-browser visual test",
+      "passed": 7,
+      "checks": [
+        "JDK-valid original is preserved and no candidate is generated",
+        "original check, generation, candidate compilation, download, apply and undo complete correctly",
+        "meaning-changing suggestions start unchecked in direct-file mode",
+        "draft persists locally, restores explicitly and can be cleared",
+        "filename correction preserves the supplied public class name",
+        "service disconnection does not prevent rule generation; reconnect restores verification",
+        "all-file precheck includes dependencies and preserves the valid project"
+      ]
+    },
+    "compiler_guided_generation": {
+      "version": "2.0",
+      "method": "Delivered rule scripts plus real loopback JDK compiler; submitted programs not executed",
+      "passed": 4,
+      "checks": [
+        "missing import: original compile -> selective generation -> candidate compile verified",
+        "deleted class with private field and brace literal: original compile -> selective generation -> candidate compile verified",
+        "missing return: original compile -> selective generation -> candidate compile verified",
+        "valid numeric char expression: original compile -> selective generation -> candidate compile verified"
+      ]
+    },
+    "independent_audit": {
+      "date": "2026-10-21",
+      "artifact": "outputs/Java_Offline_Checker/index.html",
+      "purpose": "Independent held-out examples; not a statistical accuracy benchmark.",
+      "valid_cases": 5,
+      "valid_cases_rewritten": 0,
+      "valid_cases_with_hints": 2,
+      "valid_cases_behavior_changed": 0,
+      "broken_cases": 10,
+      "broken_cases_compiling_after_generation": 6,
+      "remaining_known_logic_error": [
+        {
+          "case": "syntax_fixed_but_logic_still_wrong",
+          "actual": "1\n",
+          "expected": "2\n"
+        }
+      ],
+      "note": "15 held-out examples, not statistical accuracy. Correct outputs preserved. Compilation cannot detect the deliberately incorrect pass-mark boundary."
+    },
+    "historical_files": "Older historical screenshots were removed when the checker moved to its own repository; they remain in git history."
+  }
+}

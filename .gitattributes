@@ -1,0 +1,3 @@
+# The Windows launcher keeps CRLF in every clone and ZIP download.
+*.cmd -text
+*.png binary
