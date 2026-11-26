@@ -1,0 +1,47 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Rule engine, examples and real JDK compilation
+        working-directory: Java-Offline-Checker
+        run: node tests/run_tests.mjs --jdk
+      # The jars are cached; Maven Central answers bursts of requests with HTTP 429, so downloads retry.
+      - name: Cache OpenJFX 17 jars
+        id: javafx-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/javafx-17.0.2
+          key: openjfx-17.0.2-linux
+      - name: Download OpenJFX 17 jars for the builder tests
+        if: steps.javafx-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/javafx-17.0.2
+          for m in base graphics controls; do
+            curl -fsSL --retry 6 --retry-all-errors --retry-delay 5 -o ~/javafx-17.0.2/javafx-$m-17.0.2-linux.jar \
+              "https://repo1.maven.org/maven2/org/openjfx/javafx-$m/17.0.2/javafx-$m-17.0.2-linux.jar"
+          done
+      - name: Virtual display for the JavaFX run tests
+        run: command -v xvfb-run || (sudo apt-get update && sudo apt-get install -y xvfb)
+      # Generators, javac compilation of every generated program (exact and universal imports), and the
+      # JavaFX run tests that click through the programs in a virtual display.
+      - name: JavaFX builder generators, javac and JavaFX run tests
+        working-directory: JavaFX-Offline-Builder
+        run: xvfb-run -a node tests/run_builder_tests.mjs --jdk --run --fx ~/javafx-17.0.2
+      - name: Part 1 revision page
+        working-directory: JavaFX-Offline-Builder/part1-prep
+        run: node tests/run_part1_tests.mjs
