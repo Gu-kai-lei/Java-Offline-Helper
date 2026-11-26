@@ -1,0 +1,20 @@
+applyBtn.setOnAction(e -> {
+    try {
+        double value = Double.parseDouble(radiusInput.getText().trim());
+        if (!Double.isFinite(value) || value < 5.0 || value > 80.0) throw new NumberFormatException();
+        c.setRadius(value);
+        statusLabel.setText("Radius: " + (value));
+    } catch (NumberFormatException ex) {
+        statusLabel.setText("Invalid radius");
+    }
+});
+
+resetBtn.setOnAction(e -> {
+    c.setCenterX(100);
+    c.setCenterY(100);
+    c.setRadius(30);
+    c.setFill(Color.BLUE);
+    c.setRotate(0);
+    statusLabel.setText("Radius: 30");
+    radiusInput.setText("30");
+});

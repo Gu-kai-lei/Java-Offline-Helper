@@ -1,0 +1,2 @@
+isbn;title;available;copies
+K1;"Intro; ""GUI""";true;2

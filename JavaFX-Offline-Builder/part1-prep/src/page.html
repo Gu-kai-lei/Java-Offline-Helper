@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<title>Test 2 Part 1 复习</title>
+<style>
+:root { color-scheme: light; --ink: #1b2a33; --muted: #566a74; --line: #d8e1e4; --accent: #2f5d8a; --soft: #e8f0f8; font-family: "Segoe UI", "Microsoft YaHei", system-ui, sans-serif; font-size: 15px; }
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); background: #f1f4f6; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; border: 1px solid #b9c7cd; border-radius: 6px; background: #fff; padding: 6px 12px; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+button[aria-pressed="true"] { background: var(--soft); border-color: var(--accent); font-weight: 600; }
+input, select { border: 1px solid #b9c7cd; border-radius: 6px; padding: 6px 8px; background: #fff; }
+header { background: #1d3550; color: #f1f6fb; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+header h1 { margin: 0; font-size: 1.3rem; }
+header p { margin: 3px 0 0; font-size: .82rem; color: #c3d4e6; }
+.tabs { display: flex; gap: 6px; }
+main { max-width: 1100px; margin: 16px auto; padding: 0 16px; }
+.panel { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.intro { color: var(--muted); font-size: .88rem; line-height: 1.55; margin: 0 0 10px; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+.toolbar input[type="search"] { flex: 1 1 240px; }
+.inline { display: inline-flex; gap: 5px; align-items: center; font-size: .88rem; }
+.muted { color: var(--muted); font-size: .85rem; }
+.item { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; margin: 6px 0; }
+.item.known { opacity: .55; }
+.item summary { cursor: pointer; line-height: 1.45; }
+.item p { margin: 6px 0 0; padding: 8px; background: #f4f7fa; border-radius: 6px; line-height: 1.5; font-size: .92rem; }
+.tag { display: inline-block; font-size: .72rem; padding: 1px 6px; border-radius: 10px; background: var(--soft); color: var(--accent); font-weight: 600; }
+.item label { float: right; font-size: .78rem; color: var(--muted); }
+.cheatsheet { width: 210mm; min-height: 297mm; max-width: 100%; margin: 10px auto; padding: 7mm; background: #fff; border: 1px solid #ccc;
+  column-count: 3; column-gap: 4mm; font: 7.6pt/1.25 "Segoe UI", Arial, sans-serif; color: #000; }
+.cheat-title { column-span: all; font-weight: 700; font-size: 9pt; border-bottom: 1px solid #000; margin-bottom: 2mm; padding-bottom: 1mm; }
+.cheatsheet section { break-inside: avoid; margin-bottom: 2.2mm; }
+.cheatsheet h4 { margin: 0 0 .7mm; font-size: 8.2pt; background: #e6e6e6; padding: .4mm 1mm; }
+.cheatsheet p { margin: 0 0 .6mm; }
+.cheatsheet code { display: block; font: 6.9pt/1.2 Consolas, "Courier New", monospace; white-space: pre-wrap; margin: 0 0 .6mm; }
+[hidden] { display: none !important; }
+@media print {
+  @page { size: A4 portrait; margin: 0; }
+  body { background: #fff; }
+  body * { visibility: hidden; }
+  #cheatsheet, #cheatsheet * { visibility: visible; }
+  #cheatsheet { position: absolute; left: 0; top: 0; margin: 0; border: 0; width: 210mm; height: 297mm; overflow: hidden; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>EIE3320 Test 2 · Part 1 笔试复习</h1>
+    <p>Part 1 在 LockDown Browser 中闭卷进行，只能带一张 A4。本页用于考前复习和打印速查纸，考试时不能打开。</p>
+  </div>
+  <div class="tabs">
+    <button type="button" id="tab-bank" aria-pressed="true">题库</button>
+    <button type="button" id="tab-sheet" aria-pressed="false">A4 速查纸</button>
+  </div>
+</header>
+<main>
+  <section id="bank" class="panel">
+    <p class="intro">题目和答案都用英文，和考卷一致。先勾选「自测」（收起答案），自己答完再点开核对；会了就勾「已掌握」，可以只看没掌握的题。</p>
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="搜索：bind、Insets、consume、anonymous…">
+      <select id="category"></select>
+      <label class="inline"><input id="hide" type="checkbox"> 自测（收起答案）</label>
+      <label class="inline"><input id="unknown" type="checkbox"> 只看未掌握</label>
+      <button type="button" id="random" class="primary">随机 10 题</button>
+      <button type="button" id="all">显示全部</button>
+      <span id="count" class="muted"></span>
+    </div>
+    <div id="list"></div>
+  </section>
+  <section id="sheet" class="panel" hidden>
+    <p class="intro">打印设置：A4、纵向、缩放 100%、页边距「默认」，在预览里确认只有 1 页。可以先在下面填姓名和学号，会显示在标题行。</p>
+    <div class="toolbar">
+      <input id="sheet-name" type="text" placeholder="姓名（可空）">
+      <input id="sheet-id" type="text" placeholder="学号（可空）">
+      <button type="button" id="print" class="primary">打印 / 另存为 PDF</button>
+    </div>
+    <div id="cheatsheet" class="cheatsheet"></div>
+  </section>
+</main>
+<script>
+/*@@THEORY@@*/
+;(function () {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
+  const store = {
+    get(key, fallback) { try { const v = localStorage.getItem("part1prep." + key); return v === null ? fallback : JSON.parse(v); } catch { return fallback; } },
+    set(key, value) { try { localStorage.setItem("part1prep." + key, JSON.stringify(value)); } catch { /* storage unavailable */ } }
+  };
+  const known = new Set(store.get("known", []));
+  let randomIds = null;
+
+  const category = $("category");
+  for (const [value, label] of [["", "全部类别"], ...Theory.categories]) {
+    const option = el("option", null, label);
+    option.value = value;
+    category.append(option);
+  }
+
+  function render() {
+    let items = Theory.search($("search").value, category.value);
+    if ($("unknown").checked) items = items.filter(q => !known.has(q.id));
+    if (randomIds) items = Theory.list.filter(q => randomIds.includes(q.id));
+    $("count").textContent = items.length + " / " + Theory.list.length + " 题 · 已掌握 " + known.size;
+    $("list").replaceChildren(...items.map(q => {
+      const box = el("details", "item" + (known.has(q.id) ? " known" : ""));
+      box.open = !$("hide").checked;
+      const summary = el("summary");
+      const mark = el("label");
+      const check = el("input");
+      check.type = "checkbox";
+      check.checked = known.has(q.id);
+      check.addEventListener("click", e => e.stopPropagation());
+      check.addEventListener("change", () => {
+        if (check.checked) known.add(q.id); else known.delete(q.id);
+        store.set("known", [...known]);
+        box.classList.toggle("known", check.checked);
+        $("count").textContent = items.length + " / " + Theory.list.length + " 题 · 已掌握 " + known.size;
+      });
+      mark.append(check, " 已掌握");
+      summary.append(el("span", "tag", q.cat), " " + q.q, mark);
+      box.append(summary, el("p", null, q.a));
+      return box;
+    }));
+  }
+
+  function renderSheet() {
+    const title = "EIE3320 Test 2 · JavaFX & Events · " + $("sheet-name").value + " " + $("sheet-id").value;
+    $("cheatsheet").replaceChildren(el("div", "cheat-title", title), ...Theory.cheatSheet.map(sec => {
+      const s = el("section");
+      s.append(el("h4", null, sec.title), ...sec.lines.map(line => line.startsWith("`") ? el("code", null, line.slice(1)) : el("p", null, line)));
+      return s;
+    }));
+    store.set("sheet", { name: $("sheet-name").value, id: $("sheet-id").value });
+  }
+
+  function show(tab) {
+    $("bank").hidden = tab !== "bank";
+    $("sheet").hidden = tab !== "sheet";
+    $("tab-bank").setAttribute("aria-pressed", String(tab === "bank"));
+    $("tab-sheet").setAttribute("aria-pressed", String(tab === "sheet"));
+    store.set("tab", tab);
+  }
+
+  for (const id of ["search", "category", "hide", "unknown"]) $(id).addEventListener(id === "search" ? "input" : "change", () => { randomIds = null; render(); });
+  $("random").addEventListener("click", () => {
+    const pool = Theory.list.filter(q => !known.has(q.id));
+    const source = pool.length >= 10 ? pool : Theory.list;
+    const picked = [];
+    while (picked.length < Math.min(10, source.length)) {
+      const q = source[Math.floor(Math.random() * source.length)];
+      if (!picked.includes(q.id)) picked.push(q.id);
+    }
+    randomIds = picked;
+    $("hide").checked = true;
+    render();
+  });
+  $("all").addEventListener("click", () => { randomIds = null; render(); });
+  $("tab-bank").addEventListener("click", () => show("bank"));
+  $("tab-sheet").addEventListener("click", () => show("sheet"));
+  $("print").addEventListener("click", () => window.print());
+  const saved = store.get("sheet", { name: "", id: "" });
+  $("sheet-name").value = saved.name;
+  $("sheet-id").value = saved.id;
+  for (const id of ["sheet-name", "sheet-id"]) $(id).addEventListener("input", renderSheet);
+  render();
+  renderSheet();
+  show(location.hash === "#sheet" ? "sheet" : store.get("tab", "bank"));
+})();
+</script>
+</body>
+</html>

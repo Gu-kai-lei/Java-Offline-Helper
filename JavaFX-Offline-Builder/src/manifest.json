@@ -1,0 +1,35 @@
+{
+  "core": [
+    "core/java.js",
+    "core/rules.js",
+    "core/shapes.js",
+    "core/oopgen.js",
+    "core/record-format.js",
+    "core/recordgen.js",
+    "core/calcgen.js",
+    "core/drawgen.js",
+    "core/skeleton.js",
+    "core/examples.js",
+    "core/knowledge.js",
+    "core/blocks.js",
+    "core/block-preview.js",
+    "core/practice.js",
+    "core/variants.js",
+    "core/variant-load.js",
+    "core/bluej.js"
+  ],
+  "ui": [
+    "ui/dom.js",
+    "ui/store.js",
+    "ui/form.js",
+    "ui/output.js",
+    "ui/preview.js",
+    "ui/knowledge-view.js",
+    "ui/views.js",
+    "ui/blocks-view.js",
+    "ui/quick-search.js",
+    "ui/app.js"
+  ],
+  "css": "ui/style.css",
+  "html": "index.html"
+}

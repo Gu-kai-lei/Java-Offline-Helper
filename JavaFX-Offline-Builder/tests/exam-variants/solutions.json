@@ -1,0 +1,662 @@
+{
+  "A2-1": {
+    "files": {
+      "Drawable.java": "158:3310483160",
+      "JavaFXRectangle.java": "1078:2979924013",
+      "Shape.java": "728:968045144",
+      "RectangleApp.java": "4103:598237653"
+    },
+    "given": "A2-1-rectangle-mover/given",
+    "skeleton": {
+      "anchor": "topLeft",
+      "step": "15",
+      "resize": "10",
+      "sizes": {
+        "radius": "50",
+        "width": "120",
+        "height": "60",
+        "side": "80",
+        "radiusX": "70",
+        "radiusY": "40",
+        "base": "100"
+      },
+      "edits": {},
+      "withMain": true
+    },
+    "oop": {
+      "appClass": "RectangleApp",
+      "title": "Rectangle Mover - {name}",
+      "output": "main",
+      "useInterface": "yes",
+      "numType": "double",
+      "startX": "80",
+      "startY": "60",
+      "anchor": "topLeft",
+      "baseColor": "ORANGE",
+      "step": "20",
+      "resizeStep": "10",
+      "shrinkMin": "",
+      "storage": "single",
+      "colorForNext": "no",
+      "newStyle": "noarg",
+      "panel": "bottom",
+      "spacing": "10",
+      "padding": "10",
+      "buttonWidth": "0",
+      "canvasW": "500",
+      "canvasH": "300",
+      "canvasColor": "WHITE",
+      "clip": "yes",
+      "sceneW": "0",
+      "sceneH": "0",
+      "infoLabel": "no",
+      "infoRegion": "",
+      "infoFormat": "Area: {area}   Perimeter: {perimeter}",
+      "infoEmpty": "No shape",
+      "sizeInput": "no",
+      "inputRegion": "top",
+      "inputLabels": "",
+      "inputDefaults": "",
+      "invalidMessage": "Invalid size",
+      "dataFile": "shapes.txt",
+      "printConsole": "yes",
+      "handlerStyle": "lambda",
+      "names": {
+        "iface": "Drawable",
+        "draw": "draw",
+        "paneParam": "canvasPane",
+        "base": "Shape",
+        "area": "area",
+        "perimeter": "perimeter",
+        "x": "x",
+        "y": "y",
+        "color": "fillColor",
+        "readShape": "",
+        "computeArea": "computeArea",
+        "computePerimeter": "computePerimeter",
+        "displayShape": "displayShape",
+        "setColor": "setColor",
+        "moveUp": "moveUp",
+        "moveDown": "moveDown",
+        "moveLeft": "moveLeft",
+        "moveRight": "moveRight",
+        "enlarge": "",
+        "shrink": ""
+      },
+      "shapes": [
+        {
+          "kind": "rectangle",
+          "className": "JavaFXRectangle",
+          "size1": "120",
+          "size2": "70"
+        }
+      ],
+      "buttons": [
+        {
+          "text": "Add Rectangle",
+          "action": "add",
+          "arg": "JavaFXRectangle"
+        },
+        {
+          "text": "Yellow",
+          "action": "color",
+          "arg": "YELLOW"
+        },
+        {
+          "text": "Green",
+          "action": "color",
+          "arg": "GREEN"
+        },
+        {
+          "text": "Left",
+          "action": "left",
+          "arg": "BLUE"
+        },
+        {
+          "text": "Right",
+          "action": "right",
+          "arg": ""
+        },
+        {
+          "text": "Up",
+          "action": "up",
+          "arg": ""
+        },
+        {
+          "text": "Down",
+          "action": "down",
+          "arg": ""
+        },
+        {
+          "text": "Clear",
+          "action": "clear",
+          "arg": ""
+        }
+      ]
+    }
+  },
+  "A2-2": {
+    "files": {
+      "Drawable.java": "206:4139701128",
+      "Shape.java": "606:1865743396",
+      "MyCircle.java": "990:2410982432",
+      "CircleStudio.java": "5262:3905603300"
+    },
+    "oop": {
+      "appClass": "CircleStudio",
+      "title": "Circle Studio - {name}",
+      "output": "split",
+      "useInterface": "yes",
+      "numType": "double",
+      "startX": "150",
+      "startY": "120",
+      "anchor": "center",
+      "baseColor": "BLUE",
+      "step": "15",
+      "resizeStep": "5",
+      "shrinkMin": "5",
+      "storage": "single",
+      "colorForNext": "no",
+      "newStyle": "noarg",
+      "panel": "left",
+      "spacing": "10",
+      "padding": "10",
+      "buttonWidth": "120",
+      "canvasW": "400",
+      "canvasH": "300",
+      "canvasColor": "WHITE",
+      "clip": "yes",
+      "sceneW": "0",
+      "sceneH": "0",
+      "infoLabel": "yes",
+      "infoRegion": "bottom",
+      "infoFormat": "Area: {area}   Perimeter: {perimeter}",
+      "infoEmpty": "No circle",
+      "sizeInput": "yes",
+      "inputRegion": "top",
+      "inputLabels": "Radius:",
+      "inputDefaults": "40",
+      "invalidMessage": "Invalid radius",
+      "dataFile": "shapes.txt",
+      "printConsole": "no",
+      "handlerStyle": "lambda",
+      "names": {
+        "iface": "Drawable",
+        "draw": "draw",
+        "paneParam": "pane",
+        "base": "Shape",
+        "area": "area",
+        "perimeter": "perimeter",
+        "x": "x",
+        "y": "y",
+        "color": "color",
+        "readShape": "",
+        "computeArea": "computeArea",
+        "computePerimeter": "computePerimeter",
+        "displayShape": "",
+        "setColor": "setColor",
+        "moveUp": "",
+        "moveDown": "",
+        "moveLeft": "moveLeft",
+        "moveRight": "moveRight",
+        "enlarge": "enlarge",
+        "shrink": "shrink"
+      },
+      "shapes": [
+        {
+          "kind": "circle",
+          "className": "MyCircle",
+          "size1": "40",
+          "size2": ""
+        }
+      ],
+      "buttons": [
+        {
+          "text": "Add Circle",
+          "action": "add",
+          "arg": "JavaFXCircle",
+          "region": "top"
+        },
+        {
+          "text": "Enlarge",
+          "action": "enlarge",
+          "arg": "",
+          "region": ""
+        },
+        {
+          "text": "Shrink",
+          "action": "shrink",
+          "arg": "RED",
+          "region": ""
+        },
+        {
+          "text": "Red",
+          "action": "color",
+          "arg": "RED",
+          "region": ""
+        },
+        {
+          "text": "Clear",
+          "action": "clear",
+          "arg": "",
+          "region": ""
+        }
+      ]
+    }
+  },
+  "A2-3": {
+    "files": {
+      "Drawable.java": "212:3370013904",
+      "Shape.java": "839:3959713180",
+      "CircleShape.java": "1402:4008185447",
+      "SquareShape.java": "1391:976545205",
+      "ShapeCollection.java": "6547:3884899357"
+    },
+    "oop": {
+      "appClass": "ShapeCollection",
+      "title": "Shape Collection - {name}",
+      "output": "split",
+      "useInterface": "yes",
+      "numType": "double",
+      "startX": "100",
+      "startY": "100",
+      "anchor": "center",
+      "baseColor": "GREEN",
+      "step": "30",
+      "resizeStep": "10",
+      "shrinkMin": "",
+      "storage": "list",
+      "colorForNext": "no",
+      "newStyle": "noarg",
+      "panel": "right",
+      "spacing": "10",
+      "padding": "15",
+      "buttonWidth": "120",
+      "canvasW": "450",
+      "canvasH": "300",
+      "canvasColor": "WHITE",
+      "clip": "yes",
+      "sceneW": "0",
+      "sceneH": "0",
+      "infoLabel": "no",
+      "infoRegion": "",
+      "infoFormat": "Area: {area}   Perimeter: {perimeter}",
+      "infoEmpty": "No shape",
+      "sizeInput": "no",
+      "inputRegion": "top",
+      "inputLabels": "",
+      "inputDefaults": "",
+      "invalidMessage": "Invalid size",
+      "dataFile": "shapes.txt",
+      "printConsole": "yes",
+      "handlerStyle": "lambda",
+      "names": {
+        "iface": "Drawable",
+        "draw": "draw",
+        "paneParam": "canvasPane",
+        "base": "Shape",
+        "area": "area",
+        "perimeter": "perimeter",
+        "x": "x",
+        "y": "y",
+        "color": "shapeColor",
+        "readShape": "readShape",
+        "computeArea": "computeArea",
+        "computePerimeter": "computePerimeter",
+        "displayShape": "displayShape",
+        "setColor": "setColor",
+        "moveUp": "moveUp",
+        "moveDown": "moveDown",
+        "moveLeft": "moveLeft",
+        "moveRight": "moveRight",
+        "enlarge": "enlarge",
+        "shrink": "shrink"
+      },
+      "shapes": [
+        {
+          "kind": "circle",
+          "className": "CircleShape",
+          "size1": "30",
+          "size2": ""
+        },
+        {
+          "kind": "square",
+          "className": "SquareShape",
+          "size1": "60",
+          "size2": "70"
+        }
+      ],
+      "buttons": [
+        {
+          "text": "Add Circle",
+          "action": "add",
+          "arg": "CircleShape",
+          "region": ""
+        },
+        {
+          "text": "Add Square",
+          "action": "add",
+          "arg": "SquareShape",
+          "region": ""
+        },
+        {
+          "text": "Move Right",
+          "action": "right",
+          "arg": "RED",
+          "region": ""
+        },
+        {
+          "text": "Blue",
+          "action": "color",
+          "arg": "BLUE",
+          "region": ""
+        },
+        {
+          "text": "Save",
+          "action": "save",
+          "arg": "",
+          "region": ""
+        },
+        {
+          "text": "Load",
+          "action": "load",
+          "arg": "",
+          "region": ""
+        },
+        {
+          "text": "Clear",
+          "action": "clear",
+          "arg": "",
+          "region": ""
+        }
+      ]
+    }
+  },
+  "L3-1": {
+    "files": {
+      "Student.java": "1327:1447432051",
+      "StudentApp.java": "17443:3322017399"
+    },
+    "record": {
+      "appClass": "StudentApp",
+      "recordClass": "Student",
+      "noun": "",
+      "title": "Student Records",
+      "output": "split",
+      "ctorUse": "form",
+      "file": "students.txt",
+      "display": "list",
+      "displayFormat": "",
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "label": "ID",
+          "getter": "getId",
+          "inForm": "yes",
+          "key": "yes",
+          "search": "yes",
+          "sort": "no",
+          "initial": ""
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "label": "Name",
+          "getter": "getName",
+          "inForm": "yes",
+          "key": "no",
+          "search": "yes",
+          "sort": "no",
+          "initial": ""
+        },
+        {
+          "name": "score",
+          "type": "double",
+          "label": "Score",
+          "getter": "getScore",
+          "inForm": "yes",
+          "key": "no",
+          "search": "no",
+          "sort": "yes",
+          "initial": "true"
+        }
+      ],
+      "fAdd": "yes",
+      "fEdit": "no",
+      "fDelete": "yes",
+      "fSearch": "yes",
+      "fDisplay": "yes",
+      "fLoadTest": "no",
+      "fSort": "yes",
+      "fClear": "yes",
+      "fExit": "yes",
+      "fStats": "yes",
+      "statsField": "score",
+      "statsText": "Statistics",
+      "toggles": [],
+      "adjusts": [],
+      "testData": "",
+      "header": "yes",
+      "headerLines": "Name: {name}        Student ID: {id}",
+      "showStart": "yes",
+      "sceneW": "820",
+      "sceneH": "560",
+      "handlerStyle": "lambda"
+    }
+  },
+  "L3-2": {
+    "files": {
+      "Product.java": "1644:4091452798",
+      "InventoryApp.java": "21637:2929074236"
+    },
+    "record": {
+      "appClass": "InventoryApp",
+      "recordClass": "Product",
+      "noun": "",
+      "title": "Inventory",
+      "output": "split",
+      "ctorUse": "form",
+      "file": "inventory.txt",
+      "display": "list",
+      "displayFormat": "{code} | {name} | Qty: {quantity} | ${price:.2f}",
+      "fields": [
+        {
+          "name": "code",
+          "type": "String",
+          "label": "Code",
+          "getter": "getCode",
+          "inForm": "yes",
+          "key": "yes",
+          "search": "yes",
+          "sort": "no",
+          "initial": ""
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "label": "Name",
+          "getter": "getName",
+          "inForm": "yes",
+          "key": "no",
+          "search": "yes",
+          "sort": "no",
+          "initial": ""
+        },
+        {
+          "name": "quantity",
+          "type": "int",
+          "label": "Quantity",
+          "getter": "getQuantity",
+          "inForm": "yes",
+          "key": "no",
+          "search": "no",
+          "sort": "no",
+          "initial": "true"
+        },
+        {
+          "name": "price",
+          "type": "double",
+          "label": "Price",
+          "getter": "getPrice",
+          "inForm": "yes",
+          "key": "no",
+          "search": "no",
+          "sort": "no",
+          "initial": "0"
+        }
+      ],
+      "fAdd": "yes",
+      "fEdit": "yes",
+      "fDelete": "yes",
+      "fSearch": "yes",
+      "fDisplay": "yes",
+      "fLoadTest": "no",
+      "fSort": "no",
+      "fClear": "no",
+      "fExit": "yes",
+      "fStats": "no",
+      "statsField": "",
+      "statsText": "Statistics",
+      "toggles": [],
+      "adjusts": [
+        {
+          "text": "Sell",
+          "field": "quantity",
+          "delta": "-1",
+          "min": "0",
+          "max": "",
+          "error": "Out of stock.",
+          "done": "One item sold."
+        },
+        {
+          "text": "Restock",
+          "field": "quantity",
+          "delta": "10",
+          "min": "",
+          "max": "999",
+          "error": "Stock limit reached.",
+          "done": "10 items added."
+        }
+      ],
+      "testData": "",
+      "header": "yes",
+      "headerLines": "Name: {name}        Student ID: {id}",
+      "showStart": "yes",
+      "sceneW": "820",
+      "sceneH": "560",
+      "handlerStyle": "lambda"
+    }
+  },
+  "L3-3": {
+    "files": {
+      "Book.java": "970:2547771681",
+      "LibraryApp.java": "15489:2565758900"
+    },
+    "given": "L3-3-library-textarea/given",
+    "skeleton": {
+      "anchor": "topLeft",
+      "step": "15",
+      "resize": "10",
+      "sizes": {
+        "radius": "50",
+        "width": "120",
+        "height": "60",
+        "side": "80",
+        "radiusX": "70",
+        "radiusY": "40",
+        "base": "100"
+      },
+      "edits": {
+        "0:Book.toString:591": {
+          "body": "return \"\" + isbn + \" | \" + title + \" | \" + available;",
+          "use": true,
+          "template": "{isbn} | {title} | {available}",
+          "status": "auto"
+        }
+      }
+    },
+    "record": {
+      "appClass": "LibraryApp",
+      "recordClass": "Book",
+      "noun": "",
+      "title": "Library",
+      "output": "main",
+      "ctorUse": "form",
+      "file": "books.txt",
+      "display": "textarea",
+      "displayFormat": "",
+      "fields": [
+        {
+          "name": "isbn",
+          "type": "String",
+          "label": "ISBN",
+          "getter": "getISBN",
+          "inForm": "yes",
+          "key": "yes",
+          "search": "yes",
+          "sort": "no",
+          "initial": ""
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "label": "Title",
+          "getter": "getTitle",
+          "inForm": "yes",
+          "key": "no",
+          "search": "yes",
+          "sort": "no",
+          "initial": ""
+        },
+        {
+          "name": "available",
+          "type": "boolean",
+          "label": "Available",
+          "getter": "isAvailable",
+          "inForm": "no",
+          "key": "no",
+          "search": "no",
+          "sort": "no",
+          "initial": "true"
+        }
+      ],
+      "fAdd": "yes",
+      "fEdit": "no",
+      "fDelete": "yes",
+      "fSearch": "yes",
+      "fDisplay": "yes",
+      "fLoadTest": "no",
+      "fSort": "yes",
+      "fClear": "yes",
+      "fExit": "yes",
+      "fStats": "no",
+      "statsField": "",
+      "statsText": "Statistics",
+      "toggles": [
+        {
+          "text": "Borrow",
+          "field": "available",
+          "value": "false",
+          "already": "The selected book is not available.",
+          "done": "Book borrowed."
+        },
+        {
+          "text": "Return",
+          "field": "available",
+          "value": "true",
+          "already": "The selected book is already available.",
+          "done": "Book returned."
+        }
+      ],
+      "adjusts": [],
+      "testData": "",
+      "header": "yes",
+      "headerLines": "Name: {name}        Student ID: {id}",
+      "showStart": "yes",
+      "sceneW": "820",
+      "sceneH": "560",
+      "handlerStyle": "lambda"
+    }
+  }
+}

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<title>JavaFX 离线积木</title>
+<style>
+/*@@STYLE@@*/
+</style>
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>JavaFX 离线积木 <small>v2.3 · @@BUILD@@</small></h1>
+    <p>EIE3320 Test 2 实操（Part 2）· 骨架补全、A2 / Lab 3 题型生成器、讲义例程 · 完全离线</p>
+  </div>
+  <div class="quick-search" role="search">
+    <input id="quick-search" type="search" autocomplete="off" spellcheck="false" aria-label="快速查找" aria-controls="quick-results" aria-expanded="false"
+      placeholder="快速查找（Ctrl+K）：import、BorderPane、getCode、文件…">
+    <div id="quick-results" class="quick-results" role="listbox" hidden></div>
+  </div>
+  <button id="profile-button" type="button" class="profile-button">考生信息</button>
+</header>
+<div class="app">
+  <nav id="nav" aria-label="功能"></nav>
+  <main id="main"></main>
+</div>
+
+<dialog id="profile-dialog" aria-labelledby="profile-heading">
+  <form id="profile-form" method="dialog">
+    <h2 id="profile-heading">考生信息</h2>
+    <p class="intro">测验规定每个源文件开头要写姓名、学号和使用的软件工具，请按实际情况填写。这里填一次，所有生成的 .java 文件都会自动加上头注释，窗口标题里的 {name} 也会换成姓名。只保存在本浏览器。</p>
+    <label class="field"><span>姓名（英文）</span><input id="profile-name" type="text" autocomplete="off" placeholder="CHAN Tai Man"></label>
+    <label class="field"><span>学号</span><input id="profile-id" type="text" autocomplete="off" placeholder="学号（自行填写）"></label>
+    <label class="field"><span>使用的工具（用了本页生成代码就如实写上）</span><input id="profile-tools" type="text" autocomplete="off"></label>
+    <label class="field"><span>import 写法</span><select id="profile-imports">
+      <option value="precise">精确 import：只导入用到的类</option>
+      <option value="universal">通用 import 块：每个文件开头同一段 *（不用记包名）</option>
+    </select></label>
+    <div class="actions">
+      <button type="submit" class="primary">保存</button>
+      <button type="button" id="profile-cancel">取消</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="bluej-dialog" aria-labelledby="bluej-heading">
+  <h2 id="bluej-heading">在 BlueJ 里运行生成的代码</h2>
+  <h3>方法 A：下载 BlueJ 项目 ZIP</h3>
+  <ol>
+    <li>点「下载 BlueJ 项目 ZIP」，在下载文件夹里右键 ZIP → 全部解压缩，把文件夹放到本机硬盘（例如 D:\Test2）。</li>
+    <li>BlueJ：Project → Open Project → 选解压出的文件夹 → 点 Compile。</li>
+    <li>右键主类 → Run JavaFX Application。</li>
+  </ol>
+  <h3>方法 B：复制粘贴</h3>
+  <ol>
+    <li>BlueJ：Project → New Project（或打开题目给的项目）。</li>
+    <li>New Class → 名字和代码里 <code>public class</code> 后面的名字完全一样（区分大小写）。</li>
+    <li>双击打开 → Ctrl+A 全选 → 粘贴替换 → Compile。多个文件就对每个文件重复一次。</li>
+    <li>题目已经给了某个类（例如 Shape.java）时，不要再新建同名类，生成器选「只输出主程序」。</li>
+  </ol>
+  <p class="hint">读写的 .txt 文件位于 BlueJ 项目文件夹。System.out 的输出在 View → Show Terminal。</p>
+  <div class="actions"><button type="button" id="bluej-close" class="primary">知道了</button></div>
+</dialog>
+
+<script>
+/*@@SCRIPT@@*/
+</script>
+</body>
+</html>

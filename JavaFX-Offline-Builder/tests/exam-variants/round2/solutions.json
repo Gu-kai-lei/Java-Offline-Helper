@@ -1,0 +1,58 @@
+{
+  "Q1": {
+    "given": "Q1-square-painter/given",
+    "skeleton": { "anchor": "topLeft", "step": "15", "resize": "10", "sizes": { "radius": "50", "width": "120", "height": "70", "side": "80", "radiusX": "70", "radiusY": "40", "base": "100" }, "edits": {} },
+    "oopFromSkeleton": true,
+    "oop": {
+      "appClass": "PainterApp", "title": "Square Painter - {name}",
+      "shapes": [{ "kind": "square", "className": "JavaFXSquare", "size1": "80", "size2": "" }],
+      "buttons": [
+        { "text": "New Square", "action": "add", "arg": "JavaFXSquare" }, { "text": "Blue", "action": "color", "arg": "BLUE" },
+        { "text": "Green", "action": "color", "arg": "GREEN" }, { "text": "Left", "action": "left", "arg": "BLUE" },
+        { "text": "Right", "action": "right", "arg": "" }, { "text": "Clear", "action": "clear", "arg": "" }],
+      "panel": "top", "buttonWidth": "0", "canvasW": "500", "canvasH": "300", "sceneW": "0", "sceneH": "0",
+      "keyControl": "arrows", "mouseControl": "click",
+      "infoLabel": "yes", "infoFormat": "Area: {area}", "infoEmpty": "No square", "infoRegion": "bottom"
+    }
+  },
+  "Q2": {
+    "oop": {
+      "appClass": "BallApp", "title": "Moving Ball - {name}", "numType": "double", "anchor": "center", "startX": "40", "startY": "100",
+      "baseColor": "ORANGE", "step": "5", "panel": "bottom", "buttonWidth": "0", "sceneW": "0", "sceneH": "0", "animMove": "right", "animInterval": "50",
+      "shapes": [{ "kind": "circle", "className": "Ball", "size1": "20", "size2": "" }],
+      "buttons": [
+        { "text": "Add Ball", "action": "add", "arg": "Ball", "region": "" }, { "text": "Start", "action": "animStart", "arg": "", "region": "" },
+        { "text": "Stop", "action": "animStop", "arg": "RED", "region": "" }, { "text": "Reset", "action": "animReset", "arg": "Ball", "region": "" }]
+    }
+  },
+  "Q3": {
+    "record": {
+      "appClass": "ContactApp", "recordClass": "Contact", "title": "Contact Book", "file": "contacts.txt",
+      "fields": [
+        { "name": "name", "type": "String", "label": "Name", "getter": "getName", "inForm": "yes", "key": "yes", "search": "yes", "sort": "no", "initial": "" },
+        { "name": "phone", "type": "String", "label": "Phone", "getter": "getPhone", "inForm": "yes", "key": "no", "search": "yes", "sort": "no", "initial": "" },
+        { "name": "email", "type": "String", "label": "Email", "getter": "getEmail", "inForm": "yes", "key": "no", "search": "no", "sort": "no", "initial": "true" }],
+      "fEdit": "no", "fLoadTest": "no", "fSort": "no", "fClear": "no",
+      "tAdd": "Add Contact", "tDelete": "Remove", "tSearch": "Find", "tDisplay": "Show All", "tExit": "Quit",
+      "saveMode": "manual", "loadedMessage": "{count} contact(s) loaded.", "countLabel": "Total contacts: {count}",
+      "toggles": [], "testData": ""
+    }
+  },
+  "Q4": {
+    "given": "Q4-gradebook/given",
+    "skeleton": { "anchor": "topLeft", "step": "15", "resize": "10", "sizes": {}, "edits": {} },
+    "recordFromSkeleton": true,
+    "record": {
+      "appClass": "GradeApp", "title": "Grade Book", "file": "grades.txt", "displayFormat": "{id} {name} {mark} {getGrade()}",
+      "fSearch": "no", "fClear": "no", "fStats": "yes", "statsField": "mark", "statsText": "Summary",
+      "statsFormat": "Count: {count}   Total: {total}   Average: {average}",
+      "filters": [{ "text": "Pass List", "field": "mark", "op": ">=", "value": "50" }]
+    }
+  },
+  "Q5": {
+    "blocks": {"config":{"className":"TrafficLight","stage":"stage","scene":"scene","title":"Traffic Light - {name}","width":"","height":""},"components":[{"id":"node1","type":"Pane","name":"board","selected":"no","arc":"0","text":"","x":"100","y":"100","radius":"20","width":"200","height":"340","color":"BLUE","pane":"","region":"bottom"},{"id":"node2","type":"Rectangle","name":"frame","selected":"no","arc":"20","text":"","x":"50","y":"20","radius":"20","width":"100","height":"300","color":"DARKGRAY","pane":"node1","region":"bottom"},{"id":"node3","type":"Circle","name":"redLight","selected":"no","arc":"0","text":"","x":"100","y":"80","radius":"30","width":"80","height":"50","color":"LIGHTGRAY","pane":"node1","region":"bottom"},{"id":"node4","type":"Circle","name":"yellowLight","selected":"no","arc":"0","text":"","x":"100","y":"170","radius":"30","width":"80","height":"50","color":"LIGHTGRAY","pane":"node1","region":"bottom"},{"id":"node5","type":"Circle","name":"greenLight","selected":"no","arc":"0","text":"","x":"100","y":"260","radius":"30","width":"80","height":"50","color":"LIGHTGRAY","pane":"node1","region":"bottom"},{"id":"node6","type":"RadioButton","name":"rbRed","selected":"no","arc":"0","text":"Red","x":"100","y":"100","radius":"20","width":"80","height":"50","color":"BLUE","pane":"","region":"bottom"},{"id":"node7","type":"RadioButton","name":"rbYellow","selected":"no","arc":"0","text":"Yellow","x":"100","y":"100","radius":"20","width":"80","height":"50","color":"BLUE","pane":"","region":"bottom"},{"id":"node8","type":"RadioButton","name":"rbGreen","selected":"no","arc":"0","text":"Green","x":"100","y":"100","radius":"20","width":"80","height":"50","color":"BLUE","pane":"","region":"bottom"},{"id":"node9","type":"CheckBox","name":"chkFrame","selected":"yes","arc":"0","text":"Show frame","x":"100","y":"100","radius":"20","width":"80","height":"50","color":"BLUE","pane":"","region":"bottom"}],"events":[{"type":"action","target":"node6","actions":[{"type":"color","values":{"node":"node3","color":"RED"},"yes":[],"no":[]},{"type":"color","values":{"node":"node4","color":"LIGHTGRAY"},"yes":[],"no":[]},{"type":"color","values":{"node":"node5","color":"LIGHTGRAY"},"yes":[],"no":[]}],"style":"lambda","partner":""},{"type":"action","target":"node7","actions":[{"type":"color","values":{"node":"node3","color":"LIGHTGRAY"},"yes":[],"no":[]},{"type":"color","values":{"node":"node4","color":"YELLOW"},"yes":[],"no":[]},{"type":"color","values":{"node":"node5","color":"LIGHTGRAY"},"yes":[],"no":[]}],"style":"lambda","partner":""},{"type":"action","target":"node8","actions":[{"type":"color","values":{"node":"node3","color":"LIGHTGRAY"},"yes":[],"no":[]},{"type":"color","values":{"node":"node4","color":"LIGHTGRAY"},"yes":[],"no":[]},{"type":"color","values":{"node":"node5","color":"GREEN"},"yes":[],"no":[]}],"style":"lambda","partner":""},{"type":"action","target":"node9","actions":[{"type":"selected","values":{"target":"node9"},"yes":[{"type":"visible","values":{"node":"node2","visible":"true"},"yes":[],"no":[]}],"no":[{"type":"visible","values":{"node":"node2","visible":"false"},"yes":[],"no":[]}]}],"style":"lambda","partner":""}],"nextId":10}
+  },
+  "Q6": {
+    "calc": {"output":"single","clearButton":"yes","errorMode":"alert","handlerStyle":"lambda","sceneW":"420","sceneH":"300","labelWidth":"170","appClass":"BMICalculator","modelClass":"","title":"BMI Calculator - {name}","buttonText":"Compute BMI","inputs":[{"label":"Weight (kg):","name":"weight","type":"double","def":"60","positive":"yes"},{"label":"Height (m):","name":"height","type":"double","def":"1.70","positive":"yes"}],"outputs":[{"label":"BMI:","name":"bmi","expr":"weight / (height * height)","show":"yes","decimals":"2"}],"texts":[{"label":"Category:","name":"category","source":"bmi","ranges":"18.5:Underweight, 25:Normal, 30:Overweight, Obese"}]}
+  }
+}
